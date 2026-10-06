@@ -1,0 +1,707 @@
+<div class="admin-products-page">
+
+    <div class="page-header">
+        <div class="page-heading">
+            <span class="eyebrow">
+                INVENTORY
+            </span>
+
+            <h1>
+                Products
+            </h1>
+
+            <p>
+                Manage your products, stock and availability.
+            </p>
+
+        </div>
+
+
+        <button type="button" class="add-product-btn" (click)="openCreate()">
+            <mat-icon> add </mat-icon>
+            <span> Add Product </span>
+
+        </button>
+
+    </div>
+
+
+    <!-- ========================================================= -->
+    <!-- TOOLBAR -->
+    <!-- ========================================================= -->
+
+    @if (!loading && !errorMessage) {
+
+    <div class="products-toolbar">
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <mat-icon>search</mat-icon>
+            <input type="text" placeholder="Search products..." [(ngModel)]="searchTerm" (keyup.enter)="applyFilters()">
+
+            @if (searchTerm) {
+
+            <button type="button" class="clear-search" (click)="clearSearch()">
+
+                <mat-icon>close</mat-icon>
+
+            </button>
+
+            }
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <select class="filter-select" [(ngModel)]="statusFilter" (change)="applyFilters()">
+
+            <option value="">
+                All Status
+            </option>
+
+            <option value="active">
+                Active
+            </option>
+
+            <option value="inactive">
+                Inactive
+            </option>
+
+        </select>
+
+
+        <!-- STOCK -->
+
+        <select class="filter-select" [(ngModel)]="stockFilter" (change)="applyFilters()">
+
+            <option value="">
+                All Stock
+            </option>
+
+            <option value="available">
+                Available
+            </option>
+
+            <option value="low">
+                Low Stock
+            </option>
+
+            <option value="out">
+                Out of Stock
+            </option>
+
+        </select>
+
+
+        <!-- SORT -->
+
+        <select class="filter-select" [(ngModel)]="sortFilter" (change)="applyFilters()">
+
+            <option value="">
+                Latest
+            </option>
+
+            <option value="name_asc">
+                Name A-Z
+            </option>
+
+            <option value="name_desc">
+                Name Z-A
+            </option>
+
+            <option value="price_asc">
+                Price Low-High
+            </option>
+
+            <option value="price_desc">
+                Price High-Low
+            </option>
+
+            <option value="stock_asc">
+                Stock Low-High
+            </option>
+
+            <option value="stock_desc">
+                Stock High-Low
+            </option>
+
+        </select>
+
+
+        <!-- FILTER BUTTON -->
+
+        <button type="button" class="filter-reset-btn" (click)="resetFilters()" title="Reset filters">
+            <mat-icon>restart_alt</mat-icon>
+        </button>
+
+    </div>
+
+    }
+
+
+    <!-- ========================================================= -->
+    <!-- LOADING -->
+    <!-- ========================================================= -->
+
+    @if (loading) {
+
+    <div class="loading-card">
+
+        <div class="loading-spinner"></div>
+
+        <h4>
+            Loading products
+        </h4>
+
+        <p>
+            Please wait while we fetch your inventory.
+        </p>
+
+    </div>
+
+    }
+
+
+    <!-- ========================================================= -->
+    <!-- ERROR -->
+    <!-- ========================================================= -->
+
+    @else if (errorMessage) {
+
+    <div class="error-card">
+
+        <div class="error-icon">
+
+            <mat-icon>
+                error
+            </mat-icon>
+
+        </div>
+
+        <div>
+
+            <h4>
+                Something went wrong
+            </h4>
+
+            <p>
+                {{ errorMessage }}
+            </p>
+
+            <button type="button" class="retry-btn" (click)="loadProducts()">
+                Try Again
+            </button>
+
+        </div>
+
+    </div>
+
+    }
+
+
+    <!-- ========================================================= -->
+    <!-- PRODUCT CONTENT -->
+    <!-- ========================================================= -->
+
+    @else {
+
+    @if (products.length > 0) {
+
+    <div class="product-table-card">
+
+        <!-- TABLE TOP -->
+
+        <div class="table-top">
+
+            <div>
+
+                <strong>
+                    All Products
+                </strong>
+
+                <span>
+                    {{ total }} products
+                </span>
+
+            </div>
+
+            <div class="table-page-info">
+
+                Page {{ currentPage }} of {{ totalPages }}
+
+            </div>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table-responsive">
+
+            <table class="products-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Product
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Price
+                        </th>
+
+                        <th>
+                            Stock
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th class="actions-column">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @for (
+                    product of products;
+                    track product._id
+                    ) {
+
+                    <tr>
+
+                        <!-- ================================= -->
+                        <!-- PRODUCT -->
+                        <!-- ================================= -->
+
+                        <td>
+
+                            <div class="product-info">
+
+                                @if (product.images.length) {
+
+                                <img [src]="product.images[0]" [alt]="product.name" class="product-image">
+
+                                }
+
+                                @else {
+
+                                <div class="product-placeholder">
+                                    <mat-icon>image</mat-icon>
+                                </div>
+                                }
+
+                                <div class="product-text">
+
+                                    <button type="button" class="product-name" (click)="openDetail(product)">
+
+                                        {{ product.name }}
+
+                                    </button>
+
+                                    <span class="product-weight">
+
+                                        {{ product.weight || 'Weight not specified' }}
+
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- ================================= -->
+                        <!-- CATEGORY -->
+                        <!-- ================================= -->
+
+                        <td>
+
+                            @if (product.category.name) {
+
+                            <span class="category-name">
+                                {{ product.category.name }}
+                            </span>
+
+                            }
+
+                            @else {
+
+                            <span class="muted-text">
+                                Uncategorized
+                            </span>
+
+                            }
+
+                        </td>
+
+
+                        <!-- ================================= -->
+                        <!-- PRICE -->
+                        <!-- ================================= -->
+
+                        <td>
+
+                            <span class="price">
+                                ₹{{ product.price | number:'1.0-2' }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- ================================= -->
+                        <!-- STOCK -->
+                        <!-- ================================= -->
+
+                        <td>
+
+                            @if (product.stock === 0) {
+
+                            <span class="stock-badge out">
+                                Out of stock
+                            </span>
+
+                            }
+
+                            @else if (product.stock <= 10) { <span class="stock-badge low">
+                                {{ product.stock }} left
+                                </span>
+
+                                }
+
+                                @else {
+
+                                <span class="stock-badge available">
+                                    {{ product.stock }} in stock
+                                </span>
+
+                                }
+
+                        </td>
+
+
+                        <!-- ================================= -->
+                        <!-- STATUS -->
+                        <!-- ================================= -->
+
+                        <td>
+
+                            @if (product.isActive) {
+
+                            <span class="status-badge active">
+
+                                <span class="status-dot"></span>
+
+                                Active
+
+                            </span>
+
+                            }
+
+                            @else {
+
+                            <span class="status-badge inactive">
+
+                                <span class="status-dot"></span>
+
+                                Inactive
+
+                            </span>
+
+                            }
+
+                        </td>
+
+
+                        <!-- ================================= -->
+                        <!-- ACTIONS -->
+                        <!-- ================================= -->
+
+                        <td>
+
+                            <div class="action-buttons">
+
+                                <!-- VIEW -->
+
+                                <button type="button" class="action-btn view" title="View product"
+                                    (click)="openDetail(product)">
+                                    <mat-icon>
+                                        visibility
+                                    </mat-icon>
+                                </button>
+
+
+                                <!-- EDIT -->
+
+                                <button type="button" class="action-btn edit" title="Edit product"
+                                    (click)="openEdit(product)">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+
+
+                                <!-- STATUS -->
+
+                                <button type="button" class="action-btn status" [title]="
+                                                    product.isActive
+                                                        ? 'Deactivate product'
+                                                        : 'Activate product'
+                                                " [disabled]="
+                                                    updatingProductId === product._id
+                                                " (click)="toggleStatus(product)">
+
+                                    @if (
+                                    updatingProductId === product._id
+                                    ) {
+
+                                    <mat-icon class="spinning">
+                                        progress_activity
+                                    </mat-icon>
+                                    }
+
+                                    @else {
+                                    <mat-icon>
+                                        {{
+                                        product.isActive
+                                        ? 'visibility_off'
+                                        : 'visibility'
+                                        }}
+
+                                    </mat-icon>
+                                    }
+                                </button>
+
+                                <!-- DELETE -->
+
+                                <button type="button" class="action-btn delete" title="Delete product"
+                                    (click)="openDelete(product)">
+
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+        @if (totalPages > 1) {
+
+        <div class="pagination">
+
+            <button type="button" class="pagination-btn" (click)="previousPage()" [disabled]="currentPage === 1">
+
+                <mat-icon>
+                    chevron_left
+                </mat-icon>
+
+                Previous
+
+            </button>
+
+
+            <div class="pagination-pages">
+
+                @for (
+                page of pageNumbers;
+                track page
+                ) {
+
+                <button type="button" class="page-number" [class.active]="page === currentPage"
+                    (click)="goToPage(page)">
+
+                    {{ page }}
+
+                </button>
+
+                }
+
+            </div>
+
+
+            <button type="button" class="pagination-btn" (click)="nextPage()" [disabled]="currentPage === totalPages">
+
+                Next
+
+                <mat-icon>
+                    chevron_right
+                </mat-icon>
+
+            </button>
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+
+    <!-- ========================================================= -->
+    <!-- EMPTY STATE -->
+    <!-- ========================================================= -->
+
+    @else {
+
+    <div class="empty-state">
+
+        <div class="empty-icon">
+            <mat-icon> inventory_2 </mat-icon>
+        </div>
+
+        <h3>
+            No products found
+        </h3>
+
+        <p>
+            There are no products matching your current filters.
+        </p>
+
+        <div class="empty-actions">
+
+            <button type="button" class="secondary-btn" (click)="resetFilters()">
+                Clear Filters
+            </button>
+
+            <button type="button" class="add-product-btn" (click)="openCreate()">
+                <mat-icon>add</mat-icon>
+                Add Product
+            </button>
+
+        </div>
+
+    </div>
+
+    }
+
+    }
+
+</div>
+
+
+
+<!-- ============================================================= -->
+<!-- DETAIL POPUP -->
+<!-- ============================================================= -->
+
+@if (showDetailModal &&selectedProduct) {
+
+<app-admin-product-detail [product]="selectedProduct" (close)="closeDetail()" (edit)="openEdit($event)"
+    (statusChanged)="onProductStatusChanged($event)" />
+
+}
+
+
+
+<!-- ============================================================= -->
+<!-- CREATE POPUP -->
+<!-- ============================================================= -->
+
+@if (showCreateModal) {
+
+<app-admin-product-create (close)="closeCreate()" (created)="onProductCreated($event)" />
+
+}
+
+
+@if (showEditModal && selectedProduct) {
+
+<app-admin-product-edit [product]="selectedProduct" (close)="closeEdit()" (updated)="onProductUpdated($event)" />
+
+}
+
+@if (showDeleteModal &&selectedProduct) {
+
+<div class="modal-backdrop-custom" (click)="closeDelete()"></div>
+<div class="delete-modal-wrapper">
+    <div class="delete-modal" (click)="$event.stopPropagation()">
+        <div class="delete-icon">
+            <mat-icon>
+                delete
+            </mat-icon>
+        </div>
+
+        <div class="delete-content">
+            <span class="delete-eyebrow">
+                DELETE PRODUCT
+            </span>
+            <h3>
+                Delete this product?
+            </h3>
+
+            <p>
+
+                You are about to permanently delete
+
+                <strong>
+                    {{ selectedProduct.name }}
+                </strong>.
+
+                This action cannot be undone.
+
+            </p>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="delete-actions">
+
+            <button type="button" class="cancel-btn" (click)="closeDelete()" [disabled]="deleting">
+                Cancel
+            </button>
+
+
+            <button type="button" class="confirm-delete-btn" (click)="confirmDelete()" [disabled]="deleting">
+
+                @if (deleting) {
+
+                <span class="small-spinner"></span>
+
+                Deleting...
+
+                }
+
+                @else {
+                <mat-icon> delete </mat-icon>
+                Delete Product
+                }
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+}

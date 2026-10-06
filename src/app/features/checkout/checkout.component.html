@@ -1,0 +1,547 @@
+<section class="checkout-page">
+
+    <div class="container py-5">
+
+        <!-- Header -->
+
+        <div class="page-header">
+
+            <span class="section-label">
+                CHECKOUT
+            </span>
+
+            <h1>
+                Complete Your Order
+            </h1>
+
+            <p>
+                Select your delivery address and
+                review your order.
+            </p>
+
+        </div>
+
+
+        @if (errorMessage) {
+
+        <div class="alert alert-danger">
+            {{ errorMessage }}
+        </div>
+
+        }
+
+
+        @if (successMessage) {
+
+        <div class="alert alert-success">
+            {{ successMessage }}
+        </div>
+
+        }
+
+
+        @if (loading) {
+
+        <div class="text-center py-5">
+
+            <div class="spinner-border" role="status"></div>
+
+        </div>
+
+        }
+
+
+        @if (
+        !loading &&
+        cart &&
+        cart.items.length > 0
+        ) {
+
+        <div class="row g-4">
+
+            <!-- LEFT -->
+
+            <div class="col-lg-7">
+
+
+                <!-- Address -->
+
+                <div class="checkout-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span>
+                                STEP 1
+                            </span>
+
+                            <h2>
+                                Delivery Address
+                            </h2>
+
+                        </div>
+
+                        <button type="button" class="btn btn-outline-dark btn-sm" (click)="
+                  showAddressForm =
+                    !showAddressForm
+                ">
+
+                            <i class="bi bi-plus-lg me-1"></i>
+
+                            Add Address
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Existing Addresses -->
+
+                    @if (
+                    addresses.length > 0
+                    ) {
+
+                    <div class="address-list">
+
+                        @for (
+                        address of addresses;
+                        track address._id
+                        ) {
+
+                        <button type="button" class="address-card" [class.selected]="
+                      selectedAddressId ===
+                      address._id
+                    " (click)="
+                      selectAddress(
+                        address._id
+                      )
+                    ">
+
+                            <div class="address-radio">
+
+                                @if (
+                                selectedAddressId ===
+                                address._id
+                                ) {
+
+                                <i class="bi bi-check"></i>
+
+                                }
+
+                            </div>
+
+
+                            <div class="address-content">
+
+                                <strong>
+                                    {{ address.name }}
+                                </strong>
+
+                                <span>
+                                    {{ address.phone }}
+                                </span>
+
+                                <p>
+
+                                    {{ address.addressLine1 }}
+
+                                    @if (
+                                    address.addressLine2
+                                    ) {
+                                    , {{
+                                    address.addressLine2
+                                    }}
+                                    }
+
+                                    <br>
+
+                                    {{ address.city }},
+                                    {{ address.state }}
+                                    -
+                                    {{ address.pincode }}
+
+                                </p>
+
+
+                                @if (
+                                address.isDefault
+                                ) {
+
+                                <small>
+                                    Default Address
+                                </small>
+
+                                }
+
+                            </div>
+
+                        </button>
+
+                        }
+
+                    </div>
+
+                    } @else {
+
+                    <div class="no-address">
+
+                        <i class="bi bi-geo-alt"></i>
+
+                        <p>
+                            You don't have any saved
+                            addresses.
+                        </p>
+
+                    </div>
+
+                    }
+
+
+                    <!-- Add Address Form -->
+
+                    @if (showAddressForm) {
+
+                    <div class="address-form">
+
+                        <h3>
+                            Add New Address
+                        </h3>
+
+
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+
+                                <label>
+                                    Full Name *
+                                </label>
+
+                                <input type="text" class="form-control" [(ngModel)]="
+                        newAddress.name
+                      " />
+
+                            </div>
+
+
+                            <div class="col-md-6">
+
+                                <label>
+                                    Phone *
+                                </label>
+
+                                <input type="tel" class="form-control" [(ngModel)]="
+                        newAddress.phone
+                      " />
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <label>
+                                    Address Line 1 *
+                                </label>
+
+                                <input type="text" class="form-control" [(ngModel)]="
+                        newAddress.addressLine1
+                      " />
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <label>
+                                    Address Line 2
+                                </label>
+
+                                <input type="text" class="form-control" [(ngModel)]="
+                        newAddress.addressLine2
+                      " />
+
+                            </div>
+
+
+                            <div class="col-md-4">
+
+                                <label>
+                                    City *
+                                </label>
+
+                                <input type="text" class="form-control" [(ngModel)]="
+                        newAddress.city
+                      " />
+
+                            </div>
+
+
+                            <div class="col-md-4">
+
+                                <label>
+                                    State *
+                                </label>
+
+                                <input type="text" class="form-control" [(ngModel)]="
+                        newAddress.state
+                      " />
+
+                            </div>
+
+
+                            <div class="col-md-4">
+
+                                <label>
+                                    Pincode *
+                                </label>
+
+                                <input type="text" class="form-control" maxlength="6" [(ngModel)]="
+                        newAddress.pincode
+                      " />
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <label>
+                                    Landmark
+                                </label>
+
+                                <input type="text" class="form-control" [(ngModel)]="
+                        newAddress.landmark
+                      " />
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <div class="form-check">
+
+                                    <input id="defaultAddress" type="checkbox" class="form-check-input" [(ngModel)]="
+                          newAddress.isDefault
+                        " />
+
+                                    <label for="defaultAddress" class="form-check-label">
+                                        Make this my default
+                                        address
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="col-12">
+
+                                <button type="button" class="btn btn-dark" [disabled]="
+                        savingAddress
+                      " (click)="
+                        addAddress()
+                      ">
+
+                                    @if (savingAddress) {
+
+                                    <span class="spinner-border
+                                 spinner-border-sm
+                                 me-2"></span>
+
+                                    Saving...
+
+                                    } @else {
+
+                                    Save Address
+
+                                    }
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    }
+
+                </div>
+
+
+                <!-- Order Items -->
+
+                <div class="checkout-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span>
+                                STEP 2
+                            </span>
+
+                            <h2>
+                                Order Items
+                            </h2>
+
+                        </div>
+
+                        <a routerLink="/cart" class="small">
+                            Edit Cart
+                        </a>
+
+                    </div>
+
+
+                    <div class="order-items">
+
+                        @for (
+                        item of cart.items;
+                        track item.product._id
+                        ) {
+
+                        <div class="order-item">
+
+                            <div class="item-image">
+
+                                <img [src]="
+                        item.product.images[0]
+                      " [alt]="
+                        item.product.name
+                      " />
+
+                            </div>
+
+
+                            <div class="item-info">
+
+                                <strong>
+                                    {{ item.product.name }}
+                                </strong>
+
+                                <span>
+                                    Qty:
+                                    {{ item.quantity }}
+                                </span>
+
+                            </div>
+
+
+                            <strong>
+                                ₹{{ item.subtotal }}
+                            </strong>
+
+                        </div>
+
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT -->
+
+            <div class="col-lg-5">
+
+                <div class="summary-card">
+
+                    <span class="section-label">
+                        ORDER SUMMARY
+                    </span>
+
+                    <h2>
+                        Review & Pay
+                    </h2>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Items
+                        </span>
+
+                        <span>
+                            {{ cart.totalItems }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <span>
+                            ₹{{ cart.totalAmount }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Delivery
+                        </span>
+
+                        <span>
+                            FREE
+                        </span>
+
+                    </div>
+
+
+                    <hr>
+
+
+                    <div class="summary-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            ₹{{ cart.totalAmount }}
+                        </strong>
+
+                    </div>
+
+
+                    <button type="button" class="pay-button" [disabled]="
+                !selectedAddressId
+              " (click)="
+                proceedToPayment()
+              ">
+
+                        Continue to Payment
+
+                        <i class="bi bi-arrow-right ms-2"></i>
+
+                    </button>
+
+
+                    <div class="secure-payment">
+
+                        <i class="bi bi-shield-lock"></i>
+
+                        Secure payment powered by
+                        Razorpay
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+</section>

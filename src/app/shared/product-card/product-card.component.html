@@ -1,0 +1,84 @@
+<article class="product-card">
+
+    <div class="product-image">
+
+        <a [routerLink]="['/products', product()._id]">
+
+            @if (product().images.length) {
+
+            <img [src]="product().images[0]" [alt]="product().name" loading="lazy" />
+
+            } @else {
+
+            <div class="image-placeholder">
+
+                <i class="bi bi-image"></i>
+
+            </div>
+
+            }
+
+        </a>
+
+
+        <button type="button" class="wishlist-btn" [class.active]="isWishlisted()" (click)="onToggleWishlist()"
+            aria-label="Add to wishlist">
+
+            <i class="bi" [class.bi-heart]="!isWishlisted()" [class.bi-heart-fill]="isWishlisted()">
+            </i>
+
+        </button>
+
+    </div>
+
+
+    <div class="product-content">
+
+        <small class="category-name">
+            {{ product().category.name }}
+        </small>
+
+
+        <h3 class="product-name">
+
+            <a [routerLink]="[
+          '/products',
+          product()._id
+        ]">
+                {{ product().name }}
+            </a>
+
+        </h3>
+
+
+        @if (product().weight) {
+
+        <div class="weight">
+            {{ product().weight }}
+        </div>
+
+        }
+
+
+        <div class="product-bottom">
+
+            <div>
+
+                <span class="price">
+                    ₹{{ product().price }}
+                </span>
+
+            </div>
+
+
+            <button type="button" class="cart-btn" (click)="onAddToCart()">
+
+                <i class="bi bi-cart-plus"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</article>

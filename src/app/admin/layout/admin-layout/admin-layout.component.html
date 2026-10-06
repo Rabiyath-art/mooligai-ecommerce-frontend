@@ -1,0 +1,180 @@
+<div class="admin-layout">
+
+    <!-- =========================================
+         MOBILE OVERLAY
+    ========================================== -->
+
+    @if (mobileMenuOpen) {
+
+    <div class="sidebar-overlay" (click)="closeMobileMenu()">
+    </div>
+
+    }
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="sidebar" [class.sidebar--mobile-open]="mobileMenuOpen">
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <a routerLink="/" class="brand-icon" (click)="closeMobileMenu()">
+                M
+            </a>
+
+            <div class="brand-text">
+
+                <strong>
+                    Mooligai
+                </strong>
+
+                <small>
+                    ADMIN
+                </small>
+
+            </div>
+
+
+            <!-- MOBILE CLOSE -->
+
+            <button type="button" class="sidebar-close" (click)="closeMobileMenu()" aria-label="Close menu">
+
+                <mat-icon>
+                    close
+                </mat-icon>
+
+            </button>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="sidebar-nav">
+
+            @for (item of menuItems; track item.route) {
+
+            <a [routerLink]="item.route" routerLinkActive="active" [routerLinkActiveOptions]="{
+                        exact: item.label === 'Dashboard'
+                    }" class="nav-item" (click)="closeMobileMenu()">
+
+                <mat-icon>
+                    {{ item.icon }}
+                </mat-icon>
+
+                <span>
+                    {{ item.label }}
+                </span>
+
+            </a>
+
+            }
+
+        </nav>
+
+
+        <!-- SIDEBAR BOTTOM -->
+
+        <div class="sidebar-bottom">
+
+            <button type="button" class="logout-button" (click)="logout()">
+
+                <mat-icon>
+                    logout
+                </mat-icon>
+
+                <span>
+                    Logout
+                </span>
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================================
+         MAIN
+    ========================================== -->
+
+    <main class="main-content">
+
+
+        <!-- =====================================
+             HEADER
+        ====================================== -->
+
+        <header class="admin-header">
+
+            <!-- MOBILE MENU BUTTON -->
+
+            <button type="button" class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Open menu">
+
+                <mat-icon>
+                    menu
+                </mat-icon>
+
+            </button>
+
+
+            <!-- PAGE TITLE -->
+
+            <div class="header-title">
+
+                <span>
+                    ADMINISTRATION
+                </span>
+
+                <h1>
+                    Admin Panel
+                </h1>
+
+            </div>
+
+
+            <!-- PROFILE -->
+
+            <div class="admin-profile">
+
+                <div class="profile-avatar">
+
+                    <mat-icon>
+                        person
+                    </mat-icon>
+
+                </div>
+
+                <div class="profile-info">
+
+                    <strong>
+                        Admin
+                    </strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =====================================
+             PAGE CONTENT
+        ====================================== -->
+
+        <section class="page-content">
+
+            <router-outlet />
+
+        </section>
+
+    </main>
+</div>

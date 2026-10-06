@@ -1,0 +1,751 @@
+<div class="order-details-page">
+
+    <div class="container py-5">
+
+
+        <!-- ================================================= -->
+        <!-- BACK -->
+        <!-- ================================================= -->
+
+        <a
+            routerLink="/orders"
+            class="back-link">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to My Orders
+
+        </a>
+
+
+        <!-- ================================================= -->
+        <!-- LOADING -->
+        <!-- ================================================= -->
+
+        @if (loading) {
+
+            <div class="loading-state">
+
+                <div
+                    class="spinner-border"
+                    role="status">
+                </div>
+
+                <p>
+                    Loading your order...
+                </p>
+
+            </div>
+
+        }
+
+
+        <!-- ================================================= -->
+        <!-- ERROR -->
+        <!-- ================================================= -->
+
+        @if (!loading && errorMessage) {
+
+            <div class="error-state">
+
+                <div class="error-icon">
+
+                    <i class="bi bi-exclamation-circle"></i>
+
+                </div>
+
+                <h2>
+                    Unable to Load Order
+                </h2>
+
+                <p>
+                    {{ errorMessage }}
+                </p>
+
+                <a
+                    routerLink="/orders"
+                    class="back-button">
+
+                    Back to My Orders
+
+                </a>
+
+            </div>
+
+        }
+
+
+        <!-- ================================================= -->
+        <!-- ORDER -->
+        <!-- ================================================= -->
+
+        @if (!loading && order) {
+
+
+            <!-- ============================================= -->
+            <!-- HEADER -->
+            <!-- ============================================= -->
+
+            <div class="page-header">
+
+                <div>
+
+                    <span class="eyebrow">
+                        ORDER DETAILS
+                    </span>
+
+                    <h1>
+                        Order #{{ order._id }}
+                    </h1>
+
+                    <p>
+                        Placed on
+                        {{ formatDate(order.createdAt) }}
+                    </p>
+
+                </div>
+
+
+                <div
+                    class="current-status"
+                    [class]="
+                        getStatusClass(
+                            order.orderStatus
+                        )
+                    ">
+
+                    {{ order.orderStatus | titlecase }}
+
+                </div>
+
+            </div>
+
+
+            <!-- ============================================= -->
+            <!-- ORDER TRACKING -->
+            <!-- ============================================= -->
+
+            <section class="tracking-card">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-label">
+                            ORDER TRACKING
+                        </span>
+
+                        <h2>
+                            Track Your Order
+                        </h2>
+
+                    </div>
+
+
+                    <span
+                        class="tracking-status"
+                        [class]="
+                            getStatusClass(
+                                order.orderStatus
+                            )
+                        ">
+
+                        {{ order.orderStatus | titlecase }}
+
+                    </span>
+
+                </div>
+
+
+                <div class="tracking">
+
+
+                    <!-- PENDING -->
+
+                    <div
+                        class="tracking-step"
+                        [class.completed]="
+                            isStatusCompleted('pending')
+                        "
+                        [class.current]="
+                            isCurrentStatus('pending')
+                        ">
+
+                        <div class="step-circle">
+
+                            @if (
+                                isStatusCompleted('pending')
+                            ) {
+
+                                <i class="bi bi-check"></i>
+
+                            } @else {
+
+                                1
+
+                            }
+
+                        </div>
+
+                        <div class="step-content">
+
+                            <strong>
+                                Order Placed
+                            </strong>
+
+                            <span>
+                                Your order has been placed.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONFIRMED -->
+
+                    <div
+                        class="tracking-step"
+                        [class.completed]="
+                            isStatusCompleted('confirmed')
+                        "
+                        [class.current]="
+                            isCurrentStatus('confirmed')
+                        ">
+
+                        <div class="step-circle">
+
+                            @if (
+                                isStatusCompleted('confirmed')
+                            ) {
+
+                                <i class="bi bi-check"></i>
+
+                            } @else {
+
+                                2
+
+                            }
+
+                        </div>
+
+                        <div class="step-content">
+
+                            <strong>
+                                Confirmed
+                            </strong>
+
+                            <span>
+                                Your order has been confirmed.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PROCESSING -->
+
+                    <div
+                        class="tracking-step"
+                        [class.completed]="
+                            isStatusCompleted('processing')
+                        "
+                        [class.current]="
+                            isCurrentStatus('processing')
+                        ">
+
+                        <div class="step-circle">
+
+                            @if (
+                                isStatusCompleted('processing')
+                            ) {
+
+                                <i class="bi bi-check"></i>
+
+                            } @else {
+
+                                3
+
+                            }
+
+                        </div>
+
+                        <div class="step-content">
+
+                            <strong>
+                                Processing
+                            </strong>
+
+                            <span>
+                                Your order is being prepared.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SHIPPED -->
+
+                    <div
+                        class="tracking-step"
+                        [class.completed]="
+                            isStatusCompleted('shipped')
+                        "
+                        [class.current]="
+                            isCurrentStatus('shipped')
+                        ">
+
+                        <div class="step-circle">
+
+                            @if (
+                                isStatusCompleted('shipped')
+                            ) {
+
+                                <i class="bi bi-check"></i>
+
+                            } @else {
+
+                                4
+
+                            }
+
+                        </div>
+
+                        <div class="step-content">
+
+                            <strong>
+                                Shipped
+                            </strong>
+
+                            <span>
+                                Your order is on the way.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DELIVERED -->
+
+                    <div
+                        class="tracking-step"
+                        [class.completed]="
+                            isStatusCompleted('delivered')
+                        "
+                        [class.current]="
+                            isStatusCompleted('delivered')
+                        ">
+
+                        <div class="step-circle">
+
+                            @if (
+                                isStatusCompleted('delivered')
+                            ) {
+
+                                <i class="bi bi-check"></i>
+
+                            } @else {
+
+                                5
+
+                            }
+
+                        </div>
+
+                        <div class="step-content">
+
+                            <strong>
+                                Delivered
+                            </strong>
+
+                            <span>
+                                Your order has been delivered.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- ============================================= -->
+            <!-- MAIN GRID -->
+            <!-- ============================================= -->
+
+            <div class="details-grid">
+
+
+                <!-- ========================================= -->
+                <!-- PRODUCTS -->
+                <!-- ========================================= -->
+
+                <section class="products-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <span class="section-label">
+                                ORDER ITEMS
+                            </span>
+
+                            <h2>
+                                Your Products
+                            </h2>
+
+                        </div>
+
+                        <span>
+                            {{ getTotalItems() }}
+                            {{
+                                getTotalItems() === 1
+                                    ? 'item'
+                                    : 'items'
+                            }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="items-list">
+
+                        @for (
+                            item of order.items;
+                            track item._id
+                        ) {
+
+                            <div class="order-item">
+
+
+                                <!-- IMAGE -->
+
+                                <div class="item-image">
+
+                                    @if (
+                                        item.product.images.length
+                                    ) {
+
+                                        <img
+                                            [src]="
+                                                item.product.images[0]
+                                            "
+                                            [alt]="item.name">
+
+                                    } @else {
+
+                                        <div
+                                            class="image-placeholder">
+
+                                            <i class="bi bi-image"></i>
+
+                                        </div>
+
+                                    }
+
+                                </div>
+
+
+                                <!-- INFO -->
+
+                                <div class="item-info">
+
+                                    <h3>
+                                        {{ item.name }}
+                                    </h3>
+
+                                    <p>
+
+                                        ₹{{ item.price }}
+
+                                        ×
+
+                                        {{ item.quantity }}
+
+                                    </p>
+
+                                </div>
+
+
+                                <!-- TOTAL -->
+
+                                <div class="item-total">
+
+                                    ₹{{ item.subtotal }}
+
+                                </div>
+
+                            </div>
+
+                        }
+
+                    </div>
+
+
+                    <!-- PRICE SUMMARY -->
+
+                    <div class="price-summary">
+
+                        <div>
+
+                            <span>
+                                Subtotal
+                            </span>
+
+                            <strong>
+                                ₹{{ order.totalAmount }}
+                            </strong>
+
+                        </div>
+
+
+                        <div>
+
+                            <span>
+                                Delivery
+                            </span>
+
+                            <strong>
+                                FREE
+                            </strong>
+
+                        </div>
+
+
+                        <div class="grand-total">
+
+                            <span>
+                                Total
+                            </span>
+
+                            <strong>
+                                ₹{{ order.totalAmount }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- ========================================= -->
+                <!-- SIDE -->
+                <!-- ========================================= -->
+
+                <div class="side-column">
+
+
+                    <!-- ===================================== -->
+                    <!-- DELIVERY ADDRESS -->
+                    <!-- ===================================== -->
+
+                    <section class="info-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <span class="section-label">
+                                    DELIVERY
+                                </span>
+
+                                <h2>
+                                    Delivery Address
+                                </h2>
+
+                            </div>
+
+                            <i class="bi bi-geo-alt"></i>
+
+                        </div>
+
+
+                        <div class="address">
+
+                            <strong>
+                                {{ order.shippingAddress.name }}
+                            </strong>
+
+                            <p>
+                                {{ order.shippingAddress.addressLine1 }}
+                            </p>
+
+
+                            @if (
+                                order.shippingAddress.addressLine2
+                            ) {
+
+                                <p>
+                                    {{
+                                        order.shippingAddress.addressLine2
+                                    }}
+                                </p>
+
+                            }
+
+
+                            <p>
+
+                                {{ order.shippingAddress.city }},
+
+                                {{ order.shippingAddress.state }}
+
+                                -
+
+                                {{ order.shippingAddress.pincode }}
+
+                            </p>
+
+
+                            <p class="phone">
+
+                                <i class="bi bi-telephone"></i>
+
+                                {{ order.shippingAddress.phone }}
+
+                            </p>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- ===================================== -->
+                    <!-- PAYMENT -->
+                    <!-- ===================================== -->
+
+                    <section class="info-card">
+
+                        <div class="card-header">
+
+                            <div>
+
+                                <span class="section-label">
+                                    PAYMENT
+                                </span>
+
+                                <h2>
+                                    Payment Details
+                                </h2>
+
+                            </div>
+
+                            <i class="bi bi-credit-card"></i>
+
+                        </div>
+
+
+                        <div class="payment-info">
+
+
+                            <div class="payment-row">
+
+                                <span>
+                                    Method
+                                </span>
+
+                                <strong>
+                                    Razorpay
+                                </strong>
+
+                            </div>
+
+
+                            <div class="payment-row">
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong
+                                    class="payment-status"
+                                    [class]="
+                                        getPaymentStatusClass(
+                                            order.payment.status
+                                        )
+                                    ">
+
+                                    {{
+                                        order.payment.status
+                                            | titlecase
+                                    }}
+
+                                </strong>
+
+                            </div>
+
+
+                            @if (
+                                order.payment.razorpayPaymentId
+                            ) {
+
+                                <div class="payment-row">
+
+                                    <span>
+                                        Payment ID
+                                    </span>
+
+                                    <strong class="payment-id">
+
+                                        {{
+                                            order.payment
+                                                .razorpayPaymentId
+                                        }}
+
+                                    </strong>
+
+                                </div>
+
+                            }
+
+                        </div>
+
+                    </section>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- ============================================= -->
+            <!-- BOTTOM -->
+            <!-- ============================================= -->
+
+            <div class="bottom-actions">
+
+                <a
+                    routerLink="/orders"
+                    class="secondary-button">
+
+                    <i class="bi bi-arrow-left"></i>
+
+                    Back to My Orders
+
+                </a>
+
+
+                <a
+                    routerLink="/products"
+                    class="primary-button">
+
+                    Continue Shopping
+
+                    <i class="bi bi-arrow-right"></i>
+
+                </a>
+
+            </div>
+
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,609 @@
+<div class="admin-order-details-page">
+
+
+    <!-- ============================================== -->
+    <!-- BACK -->
+    <!-- ============================================== -->
+
+    <a routerLink="/admin/orders" class="back-link">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Back to Orders
+
+    </a>
+
+
+    <!-- ============================================== -->
+    <!-- LOADING -->
+    <!-- ============================================== -->
+
+    @if (loading) {
+
+    <div class="loading-state">
+
+        <div class="spinner-border" role="status">
+        </div>
+
+        <p>
+            Loading order...
+        </p>
+
+    </div>
+
+    }
+
+
+    <!-- ============================================== -->
+    <!-- ERROR -->
+    <!-- ============================================== -->
+
+    @if (!loading && errorMessage) {
+
+    <div class="error-state">
+
+        <div class="error-icon">
+            !
+        </div>
+
+        <h2>
+            Unable to Load Order
+        </h2>
+
+        <p>
+            {{ errorMessage }}
+        </p>
+
+        <a routerLink="/admin/orders" class="back-btn">
+
+            Back to Orders
+
+        </a>
+
+    </div>
+
+    }
+
+
+    <!-- ============================================== -->
+    <!-- ORDER -->
+    <!-- ============================================== -->
+
+    @if (!loading && order) {
+
+
+    <!-- ========================================== -->
+    <!-- HEADER -->
+    <!-- ========================================== -->
+
+    <div class="page-header">
+
+        <div class="page-heading">
+
+            <span class="eyebrow">
+                ORDER DETAILS
+            </span>
+
+            <h1>
+                Order #{{ order._id }}
+            </h1>
+
+            <p>
+                Placed on {{ formatDate(order.createdAt) }}
+            </p>
+
+        </div>
+
+        <span class="status-badge" [class]="getStatusClass(order.orderStatus)">
+
+            {{ order.orderStatus }}
+
+        </span>
+
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- SUCCESS -->
+    <!-- ========================================== -->
+
+    @if (successMessage) {
+
+    <div class="success-message">
+
+        <i class="bi bi-check-circle"></i>
+
+        {{ successMessage }}
+
+    </div>
+
+    }
+
+
+    <!-- ========================================== -->
+    <!-- ERROR -->
+    <!-- ========================================== -->
+
+    @if (errorMessage) {
+
+    <div class="inline-error">
+
+        {{ errorMessage }}
+
+    </div>
+
+    }
+
+
+    <div class="details-grid">
+
+
+        <!-- ====================================== -->
+        <!-- LEFT -->
+        <!-- ====================================== -->
+
+        <div class="main-column">
+
+
+            <!-- ================================== -->
+            <!-- ORDER STATUS -->
+            <!-- ================================== -->
+
+            <section class="info-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            ORDER
+                        </span>
+
+                        <h2>
+                            Order Status
+                        </h2>
+
+                    </div>
+
+                    <i class="bi bi-box-seam"></i>
+
+                </div>
+
+
+                <div class="status-control">
+
+                    <label>
+                        Update Status
+                    </label>
+
+
+                    <select [value]="order.orderStatus" [disabled]="
+                                updatingStatus ||
+                                order.orderStatus === 'delivered' ||
+                                order.orderStatus === 'cancelled'
+                            " (change)="
+                                updateStatus(
+                                    $any($event.target).value
+                                )
+                            ">
+
+                        @for (
+                        status of statuses;
+                        track status
+                        ) {
+
+                        <option [value]="status">
+
+                            {{ status }}
+
+                        </option>
+
+                        }
+
+                    </select>
+
+
+                    @if (updatingStatus) {
+
+                    <small>
+                        Updating status...
+                    </small>
+
+                    }
+
+
+                    @if (
+                    order.orderStatus === 'delivered'
+                    ) {
+
+                    <small>
+                        Delivered orders cannot
+                        be changed.
+                    </small>
+
+                    }
+
+
+                    @if (
+                    order.orderStatus === 'cancelled'
+                    ) {
+
+                    <small>
+                        Cancelled orders cannot
+                        be changed.
+                    </small>
+
+                    }
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================== -->
+            <!-- PRODUCTS -->
+            <!-- ================================== -->
+
+            <section class="info-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="eyebrow">
+                            ORDER ITEMS
+                        </span>
+
+                        <h2>
+                            Products
+                        </h2>
+
+                    </div>
+
+                    <span>
+                        {{ getTotalItems() }}
+                        items
+                    </span>
+
+                </div>
+
+
+                <div class="items-list">
+
+                    @for (
+                    item of order.items;
+                    track item._id
+                    ) {
+
+                    <div class="order-item">
+
+
+                        <div class="item-image">
+
+                            @if (
+                            item.product.images.length
+                            ) {
+
+                            <img [src]="
+                                                item.product.images[0]
+                                            " [alt]="item.name">
+
+                            } @else {
+
+                            <div class="image-placeholder">
+
+                                <i class="bi bi-image"></i>
+
+                            </div>
+
+                            }
+
+                        </div>
+
+
+                        <div class="item-info">
+
+                            <h3>
+                                {{ item.name }}
+                            </h3>
+
+                            <p>
+                                ₹{{ item.price }}
+                                ×
+                                {{ item.quantity }}
+                            </p>
+
+                            @if (
+                            item.product.weight
+                            ) {
+
+                            <span>
+                                {{
+                                item.product.weight
+                                }}
+                            </span>
+
+                            }
+
+                        </div>
+
+
+                        <strong class="item-total">
+
+                            ₹{{ item.subtotal }}
+
+                        </strong>
+
+                    </div>
+
+                    }
+
+                </div>
+
+
+                <div class="price-summary">
+
+                    <div>
+
+                        <span>
+                            Total Items
+                        </span>
+
+                        <strong>
+                            {{ getTotalItems() }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="grand-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            ₹{{ order.totalAmount }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- RIGHT -->
+        <!-- ====================================== -->
+
+        <div class="side-column">
+
+
+            <!-- ================================== -->
+            <!-- CUSTOMER -->
+            <!-- ================================== -->
+
+            <section class="info-card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Customer
+                    </h2>
+
+                    <i class="bi bi-person"></i>
+
+                </div>
+
+
+                <div class="customer-detail">
+
+                    @if (order.user.avatar) {
+
+                    <img [src]="order.user.avatar" [alt]="order.user.name">
+
+                    } @else {
+
+                    <div class="avatar-placeholder">
+
+                        {{ order.user.name.charAt(0) }}
+
+                    </div>
+
+                    }
+
+
+                    <div>
+
+                        <strong>
+                            {{ order.user.name }}
+                        </strong>
+
+                        <p>
+                            {{ order.user.email }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================== -->
+            <!-- DELIVERY -->
+            <!-- ================================== -->
+
+            <section class="info-card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Delivery Address
+                    </h2>
+
+                    <i class="bi bi-geo-alt"></i>
+
+                </div>
+
+
+                <div class="address">
+
+                    <strong>
+                        {{ order.shippingAddress.name }}
+                    </strong>
+
+                    <p>
+                        {{ order.shippingAddress.addressLine1 }}
+                    </p>
+
+                    @if (
+                    order.shippingAddress.addressLine2
+                    ) {
+
+                    <p>
+                        {{ order.shippingAddress.addressLine2 }}
+                    </p>
+
+                    }
+
+                    <p>
+
+                        {{ order.shippingAddress.city }},
+
+                        {{ order.shippingAddress.state }}
+
+                        -
+
+                        {{ order.shippingAddress.pincode }}
+
+                    </p>
+
+
+                    <p class="phone">
+
+                        <i class="bi bi-telephone"></i>
+
+                        {{ order.shippingAddress.phone }}
+
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================== -->
+            <!-- PAYMENT -->
+            <!-- ================================== -->
+
+            <section class="info-card">
+
+                <div class="card-header">
+
+                    <h2>
+                        Payment
+                    </h2>
+
+                    <i class="bi bi-credit-card"></i>
+
+                </div>
+
+
+                <div class="payment-info">
+
+
+                    <div class="payment-row">
+
+                        <span>
+                            Method
+                        </span>
+
+                        <strong>
+                            Razorpay
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-row">
+
+                        <span>
+                            Status
+                        </span>
+
+                        <strong class="payment-badge" [class]="
+                                    getPaymentStatusClass(
+                                        order.payment.status
+                                    )
+                                ">
+
+                            {{ order.payment.status }}
+
+                        </strong>
+
+                    </div>
+
+
+                    @if (
+                    order.payment.razorpayOrderId
+                    ) {
+
+                    <div class="payment-row">
+
+                        <span>
+                            Razorpay Order
+                        </span>
+
+                        <strong class="payment-id">
+
+                            {{
+                            order.payment
+                            .razorpayOrderId
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                    }
+
+
+                    @if (
+                    order.payment.razorpayPaymentId
+                    ) {
+
+                    <div class="payment-row">
+
+                        <span>
+                            Payment ID
+                        </span>
+
+                        <strong class="payment-id">
+
+                            {{
+                            order.payment
+                            .razorpayPaymentId
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                    }
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+    </div>
+
+    }
+
+</div>

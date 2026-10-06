@@ -1,0 +1,381 @@
+<section class="product-details-page">
+
+    <div class="container py-5">
+
+        <!-- Breadcrumb -->
+
+        <nav class="breadcrumb-wrapper">
+
+            <a routerLink="/">
+                Home
+            </a>
+
+            <span>/</span>
+
+            <a routerLink="/products">
+                Products
+            </a>
+
+            @if (product) {
+
+            <span>/</span>
+
+            <span>
+                {{ product.name }}
+            </span>
+
+            }
+
+        </nav>
+
+
+        <!-- Loading -->
+
+        @if (loading) {
+
+        <div class="loading-state">
+
+            <div class="spinner-border" role="status"></div>
+
+            <p>
+                Loading product...
+            </p>
+
+        </div>
+
+        }
+
+
+        <!-- Error -->
+
+        @if (errorMessage && !product) {
+
+        <div class="alert alert-danger">
+            {{ errorMessage }}
+        </div>
+
+        }
+
+
+        @if (product && !loading) {
+
+        <div class="row g-5">
+
+            <!-- Product Images -->
+
+            <div class="col-lg-6">
+
+                <div class="gallery">
+
+                    <!-- Main Image -->
+
+                    <div class="main-image">
+
+                        @if (selectedImage) {
+
+                        <img [src]="selectedImage" [alt]="product.name" />
+
+                        } @else {
+
+                        <div class="image-placeholder">
+
+                            <i class="bi bi-image"></i>
+
+                        </div>
+
+                        }
+
+                        <button type="button" class="wishlist-button" (click)="addToWishlist()">
+
+                            <i class="bi bi-heart"></i>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Thumbnails -->
+
+                    @if (
+                    product.images &&
+                    product.images.length > 1
+                    ) {
+
+                    <div class="thumbnail-list">
+
+                        @for (
+                        image of product.images;
+                        track image
+                        ) {
+
+                        <button type="button" class="thumbnail" [class.active]="
+                      selectedImage === image
+                    " (click)="
+                      selectImage(image)
+                    ">
+
+                            <img [src]="image" [alt]="product.name" />
+
+                        </button>
+
+                        }
+
+                    </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- Product Information -->
+
+            <div class="col-lg-6">
+
+                <div class="product-info">
+
+                    <!-- Category -->
+
+                    <span class="category">
+                        {{ product.category.name }}
+                    </span>
+
+
+                    <!-- Name -->
+
+                    <h1>
+                        {{ product.name }}
+                    </h1>
+
+
+                    <!-- Price -->
+
+                    <div class="price-section">
+
+                        <span class="price">
+                            ₹{{ product.price }}
+                        </span>
+
+                        @if (
+                        product.comparePrice &&
+                        product.comparePrice >
+                        product.price
+                        ) {
+
+                        <span class="compare-price">
+                            ₹{{ product.comparePrice }}
+                        </span>
+
+                        }
+
+                    </div>
+
+
+                    <!-- Short Description -->
+
+                    @if (
+                    product.shortDescription
+                    ) {
+
+                    <p class="short-description">
+                        {{ product.shortDescription }}
+                    </p>
+
+                    }
+
+
+                    <hr>
+
+
+                    <!-- Weight -->
+
+                    @if (product.weight) {
+
+                    <div class="product-meta">
+
+                        <span>
+                            Weight
+                        </span>
+
+                        <strong>
+                            {{ product.weight }}
+                        </strong>
+
+                    </div>
+
+                    }
+
+
+                    <!-- Stock -->
+
+                    <div class="product-meta">
+
+                        <span>
+                            Availability
+                        </span>
+
+                        @if (product.stock > 0) {
+
+                        <strong class="in-stock">
+                            In Stock
+                        </strong>
+
+                        } @else {
+
+                        <strong class="out-stock">
+                            Out of Stock
+                        </strong>
+
+                        }
+
+                    </div>
+
+
+                    <!-- Quantity -->
+
+                    @if (product.stock > 0) {
+
+                    <div class="quantity-section">
+
+                        <label>
+                            Quantity
+                        </label>
+
+                        <div class="quantity-control">
+
+                            <button type="button" (click)="
+                      decreaseQuantity()
+                    ">
+                                −
+                            </button>
+
+                            <span>
+                                {{ quantity }}
+                            </span>
+
+                            <button type="button" (click)="
+                      increaseQuantity()
+                    ">
+                                +
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Add Cart -->
+
+                    <button type="button" class="add-cart-btn" [disabled]="addingToCart" (click)="addToCart()">
+
+                        @if (addingToCart) {
+
+                        <span class="spinner-border
+                           spinner-border-sm
+                           me-2"></span>
+
+                        Adding...
+
+                        } @else {
+
+                        <i class="bi bi-cart-plus me-2"></i>
+
+                        Add to Cart
+
+                        }
+
+                    </button>
+
+                    } @else {
+
+                    <button type="button" class="btn btn-secondary
+                       w-100" disabled>
+
+                        Out of Stock
+
+                    </button>
+
+                    }
+
+
+                    <!-- Success -->
+
+                    @if (successMessage) {
+
+                    <div class="alert alert-success
+                       mt-3">
+
+                        {{ successMessage }}
+
+                        <a routerLink="/cart" class="alert-link ms-1">
+                            View Cart
+                        </a>
+
+                    </div>
+
+                    }
+
+
+                    <!-- Description -->
+
+                    <div class="description">
+
+                        <h3>
+                            About this product
+                        </h3>
+
+                        <p>
+                            {{ product.description }}
+                        </p>
+
+                    </div>
+
+
+                    <!-- Ingredients -->
+
+                    @if (
+                    product.ingredients?.length
+                    ) {
+
+                    <div class="ingredients">
+
+                        <h3>
+                            Ingredients
+                        </h3>
+
+                        <ul>
+
+                            @for (
+                            ingredient of
+                            product.ingredients;
+                            track ingredient
+                            ) {
+
+                            <li>
+
+                                <i class="bi bi-check2"></i>
+
+                                {{ ingredient }}
+
+                            </li>
+
+                            }
+
+                        </ul>
+
+                    </div>
+
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+</section>

@@ -1,0 +1,311 @@
+<!-- ======================================== -->
+<!-- BACKDROP -->
+<!-- ======================================== -->
+
+<div class="modal-backdrop-custom" (click)="closeModal()"></div>
+
+
+
+<!-- ======================================== -->
+<!-- MODAL -->
+<!-- ======================================== -->
+
+<div class="product-modal-wrapper">
+
+    <div class="product-modal" (click)="$event.stopPropagation()">
+
+
+        <!-- ================================= -->
+        <!-- HEADER -->
+        <!-- ================================= -->
+
+        <div class="modal-header-custom">
+
+            <div>
+
+                <span class="eyebrow">
+                    PRODUCT
+                </span>
+
+                <h3>
+                    Product Details
+                </h3>
+
+            </div>
+
+
+            <button type="button" class="close-btn" (click)="closeModal()">
+
+                <mat-icon>
+                    close
+                </mat-icon>
+
+            </button>
+
+        </div>
+
+
+
+        <!-- ================================= -->
+        <!-- BODY -->
+        <!-- ================================= -->
+
+        <div class="modal-body-custom">
+
+
+            <!-- ================================= -->
+            <!-- IMAGE -->
+            <!-- ================================= -->
+
+            <div class="product-detail-image">
+
+                @if ( product.images.length ) {
+
+                <img [src]="product.images[0]" [alt]="product.name">
+
+                }
+
+                @else {
+                <div class="image-placeholder">
+                    <mat-icon> image </mat-icon>
+                    No image
+                </div>
+                }
+            </div>
+
+
+
+            <!-- ================================= -->
+            <!-- PRODUCT INFO -->
+            <!-- ================================= -->
+
+            <div class="product-detail-info">
+
+                <h2>
+                    {{ product.name }}
+                </h2>
+
+
+                @if (product.category) {
+
+                <span class="category-badge">
+
+                    {{ product.category.name }}
+
+                </span>
+
+                }
+
+
+
+                <!-- ================================= -->
+                <!-- DETAILS -->
+                <!-- ================================= -->
+
+                <div class="detail-grid">
+
+
+                    <!-- PRICE -->
+
+                    <div class="detail-item">
+
+                        <span>
+                            Price
+                        </span>
+
+                        <strong>
+                            ₹{{ product.price }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- WEIGHT -->
+
+                    <div class="detail-item">
+
+                        <span>
+                            Weight
+                        </span>
+
+                        <strong>
+                            {{ product.weight || '-' }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- STOCK -->
+
+                    <div class="detail-item">
+
+                        <span>
+                            Stock
+                        </span>
+
+                        <strong>
+                            {{ product.stock }}
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- STATUS -->
+
+                    <div class="detail-item">
+
+                        <span>
+                            Status
+                        </span>
+
+
+                        @if (
+                        product.isActive
+                        ) {
+
+                        <span class="status active">
+                            Active
+                        </span>
+
+                        }
+
+                        @else {
+
+                        <span class="status inactive">
+                            Inactive
+                        </span>
+
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ================================= -->
+            <!-- DESCRIPTION -->
+            <!-- ================================= -->
+
+            <div class="detail-section">
+
+                <h4>
+                    Description
+                </h4>
+
+                <p>
+                    {{ product.description || '-' }}
+                </p>
+
+            </div>
+
+
+
+            <!-- ================================= -->
+            <!-- INGREDIENTS -->
+            <!-- ================================= -->
+
+            <div class="detail-section">
+
+                <h4>
+                    Ingredients
+                </h4>
+
+
+                @if (
+                product.ingredients?.length
+                ) {
+
+                <div class="ingredients">
+
+                    @for (
+                    ingredient of product.ingredients;
+                    track ingredient
+                    ) {
+
+                    <span>
+                        {{ ingredient }}
+                    </span>
+
+                    }
+
+                </div>
+
+                }
+
+                @else {
+
+                <p>
+                    No ingredients added.
+                </p>
+
+                }
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ================================= -->
+        <!-- FOOTER -->
+        <!-- ================================= -->
+
+        <div class="modal-footer-custom">
+
+
+            <!-- CLOSE -->
+
+            <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">
+
+                Close
+
+            </button>
+
+
+
+            <!-- DELETE -->
+
+            <button type="button" class="btn btn-outline-danger" (click)="deleteProduct()">
+                <mat-icon> delete </mat-icon>
+                Delete
+            </button>
+
+            <button type="button" class="btn btn-outline-dark" (click)="toggleStatus()" [disabled]="updatingStatus">
+                @if (updatingStatus) {
+                Updating...
+                }
+                @else if ( product.isActive ) {
+                Deactivate
+                }
+
+                @else {
+                Activate
+                }
+
+            </button>
+
+
+
+            <!-- EDIT -->
+
+            <button type="button" class="btn btn-dark" (click)="editProduct()">
+
+                <mat-icon>
+                    edit
+                </mat-icon>
+
+                Edit Product
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

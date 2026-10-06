@@ -1,0 +1,260 @@
+<section class="cart-page">
+
+    <div class="container py-5">
+
+        <div class="page-header">
+
+            <span class="section-label">
+                SHOPPING CART
+            </span>
+
+            <h1>
+                Your Cart
+            </h1>
+
+        </div>
+
+
+        @if (loading) {
+
+        <div class="text-center py-5">
+
+            <div class="spinner-border" role="status"></div>
+
+        </div>
+
+        }
+
+
+        @if (
+        !loading &&
+        cart &&
+        cart.items.length > 0
+        ) {
+
+        <div class="row g-4">
+
+            <!-- Cart Items -->
+
+            <div class="col-lg-8">
+
+                <div class="cart-box">
+
+                    @for (
+                    item of cart.items;
+                    track item.product._id
+                    ) {
+
+                    <div class="cart-item">
+
+                        <div class="cart-image">
+
+                            @if (
+                            item.product.images.length
+                            ) {
+
+                            <img [src]="
+                        item.product.images[0]
+                      " [alt]="
+                        item.product.name
+                      " />
+
+                            }
+
+                        </div>
+
+
+                        <div class="cart-info">
+
+                            <span class="category">
+                                {{
+                                item.product.category.name
+                                }}
+                            </span>
+
+                            <h3>
+                                {{ item.product.name }}
+                            </h3>
+
+                            <strong>
+                                ₹{{ item.price }}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="quantity-control">
+
+                            <button type="button" (click)="
+                      decreaseQuantity(
+                        item.product._id,
+                        item.quantity
+                      )
+                    ">
+                                −
+                            </button>
+
+                            <span>
+                                {{ item.quantity }}
+                            </span>
+
+                            <button type="button" (click)="
+                      increaseQuantity(
+                        item.product._id,
+                        item.quantity
+                      )
+                    ">
+                                +
+                            </button>
+
+                        </div>
+
+
+                        <div class="item-total">
+
+                            ₹{{ item.subtotal }}
+
+                        </div>
+
+
+                        <button type="button" class="remove-btn" (click)="
+                    removeItem(
+                      item.product._id
+                    )
+                  ">
+
+                            <i class="bi bi-trash"></i>
+
+                        </button>
+
+                    </div>
+
+                    }
+
+                </div>
+
+
+                <div class="cart-actions">
+
+                    <button class="btn btn-outline-dark" (click)="clearCart()">
+                        Clear Cart
+                    </button>
+
+                    <a routerLink="/products" class="btn btn-dark">
+                        Continue Shopping
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- Summary -->
+
+            <div class="col-lg-4">
+
+                <div class="summary-box">
+
+                    <h2>
+                        Order Summary
+                    </h2>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Items
+                        </span>
+
+                        <span>
+                            {{ cart.totalItems }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <span>
+                            ₹{{ cart.totalAmount }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="summary-row">
+
+                        <span>
+                            Delivery
+                        </span>
+
+                        <span>
+                            FREE
+                        </span>
+
+                    </div>
+
+
+                    <hr />
+
+
+                    <div class="summary-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            ₹{{ cart.totalAmount }}
+                        </strong>
+
+                    </div>
+
+
+                    <a routerLink="/checkout" class="btn btn-dark w-100 mt-4">
+                        Proceed to Checkout
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        }
+
+
+        @if (
+        !loading &&
+        cart &&
+        cart.items.length === 0
+        ) {
+
+        <div class="empty-cart">
+
+            <i class="bi bi-cart3"></i>
+
+            <h2>
+                Your cart is empty
+            </h2>
+
+            <p>
+                Looks like you haven't added
+                anything yet.
+            </p>
+
+            <a routerLink="/products" class="btn btn-dark">
+                Start Shopping
+            </a>
+
+        </div>
+
+        }
+
+    </div>
+
+</section>

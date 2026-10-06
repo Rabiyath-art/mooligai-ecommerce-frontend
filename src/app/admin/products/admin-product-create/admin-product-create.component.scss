@@ -1,0 +1,626 @@
+.product-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+}
+
+
+.product-modal-wrapper {
+    position: fixed;
+    inset: 0;
+    z-index: 2001;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    pointer-events: none;
+}
+
+
+.product-modal {
+    width: min(900px, 100%);
+    max-height: calc(100vh - 48px);
+
+    background: #ffffff;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.22);
+
+    overflow-y: auto;
+
+    pointer-events: auto;
+}
+
+
+// ========================================
+// HEADER
+// ========================================
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+
+    padding: 28px 32px;
+
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+.eyebrow {
+    display: block;
+
+    margin-bottom: 6px;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 0.16em;
+
+    color: #6b7280;
+}
+
+
+.modal-header h2 {
+    margin: 0;
+
+    font-size: 30px;
+    font-weight: 700;
+
+    color: #111827;
+}
+
+
+.modal-header p {
+    margin: 7px 0 0;
+
+    color: #6b7280;
+}
+
+
+.close-btn {
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid #e5e7eb;
+
+    background: #fff;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.close-btn:hover {
+    background: #f3f4f6;
+}
+
+
+// ========================================
+// ERROR
+// ========================================
+
+.form-error {
+    margin: 20px 32px 0;
+
+    padding: 13px 15px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 10px;
+
+    background: #fef2f2;
+
+    color: #b91c1c;
+
+    font-size: 14px;
+}
+
+
+// ========================================
+// FORM
+// ========================================
+
+.product-form {
+    padding: 0 32px 32px;
+}
+
+
+.form-section {
+    padding: 28px 0;
+
+    border-bottom: 1px solid #eef0f3;
+}
+
+
+.section-heading {
+    display: flex;
+    gap: 15px;
+
+    margin-bottom: 24px;
+}
+
+
+.section-number {
+    font-size: 12px;
+    font-weight: 700;
+
+    color: #9ca3af;
+}
+
+
+.section-heading h3 {
+    margin: 0;
+
+    font-size: 20px;
+
+    color: #111827;
+}
+
+
+.section-heading p {
+    margin: 5px 0 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+}
+
+
+// ========================================
+// FORM GROUP
+// ========================================
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+
+.form-group label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #374151;
+}
+
+
+.form-group label span {
+    color: #dc2626;
+}
+
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    outline: none;
+
+    background: #fff;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #111827;
+
+    box-shadow:
+        0 0 0 3px rgba(17, 24, 39, 0.07);
+}
+
+
+.form-group textarea {
+    resize: vertical;
+}
+
+
+.form-group small {
+    display: block;
+
+    margin-top: 6px;
+
+    font-size: 11px;
+
+    color: #9ca3af;
+}
+
+
+// ========================================
+// TWO COLUMN
+// ========================================
+
+.two-column {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px;
+}
+
+
+.input-with-prefix {
+    display: flex;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    overflow: hidden;
+}
+
+
+.input-with-prefix span {
+    display: flex;
+    align-items: center;
+
+    padding: 0 14px;
+
+    background: #f9fafb;
+
+    color: #6b7280;
+}
+
+
+.input-with-prefix input {
+    border: 0;
+
+    border-radius: 0;
+}
+
+
+// ========================================
+// CATEGORY LOADING
+// ========================================
+
+.select-loading {
+    padding: 12px 14px;
+
+    border: 1px solid #d1d5db;
+
+    border-radius: 9px;
+
+    color: #9ca3af;
+
+    font-size: 14px;
+}
+
+
+// ========================================
+// STATUS
+// ========================================
+
+.status-toggle {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    cursor: pointer;
+}
+
+
+.status-toggle input {
+    display: none;
+}
+
+
+.toggle-track {
+    width: 42px;
+    height: 24px;
+
+    padding: 3px;
+
+    border-radius: 20px;
+
+    background: #d1d5db;
+
+    transition: 0.2s;
+}
+
+
+.toggle-thumb {
+    display: block;
+
+    width: 18px;
+    height: 18px;
+
+    background: #fff;
+
+    border-radius: 50%;
+
+    transition: 0.2s;
+}
+
+
+.status-toggle input:checked+.toggle-track {
+    background: #111827;
+}
+
+
+.status-toggle input:checked+.toggle-track .toggle-thumb {
+    transform: translateX(18px);
+}
+
+
+.status-toggle strong,
+.status-toggle small {
+    display: block;
+}
+
+
+.status-toggle strong {
+    font-size: 13px;
+}
+
+
+.status-toggle small {
+    margin-top: 3px;
+
+    color: #9ca3af;
+
+    font-size: 11px;
+}
+
+
+// ========================================
+// UPLOAD
+// ========================================
+
+.upload-box {
+    min-height: 150px;
+
+    border: 1.5px dashed #d1d5db;
+
+    border-radius: 12px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    cursor: pointer;
+
+    color: #6b7280;
+}
+
+
+.upload-box:hover {
+    background: #f9fafb;
+
+    border-color: #9ca3af;
+}
+
+
+.upload-box input {
+    display: none;
+}
+
+
+.upload-box .material-symbols-outlined {
+    font-size: 32px;
+}
+
+
+.upload-box strong {
+    font-size: 13px;
+
+    color: #374151;
+}
+
+
+.upload-box small {
+    font-size: 11px;
+
+    color: #9ca3af;
+}
+
+
+// ========================================
+// IMAGE GRID
+// ========================================
+
+.image-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 12px;
+
+    margin-top: 15px;
+}
+
+
+.image-item {
+    position: relative;
+
+    aspect-ratio: 1;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    border: 1px solid #e5e7eb;
+}
+
+
+.image-item img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.remove-image {
+    position: absolute;
+
+    top: 6px;
+    right: 6px;
+
+    width: 26px;
+    height: 26px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    color: #fff;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+// ========================================
+// FOOTER
+// ========================================
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding-top: 25px;
+}
+
+
+.secondary-btn,
+.primary-btn {
+    min-height: 42px;
+
+    padding: 0 18px;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.secondary-btn {
+    border: 1px solid #d1d5db;
+
+    background: #fff;
+
+    color: #374151;
+}
+
+
+.primary-btn {
+    border: 0;
+
+    background: #111827;
+
+    color: #fff;
+}
+
+
+.primary-btn:disabled,
+.secondary-btn:disabled,
+.close-btn:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+.small-spinner {
+    width: 15px;
+    height: 15px;
+
+    border: 2px solid rgba(255, 255, 255, 0.35);
+
+    border-top-color: #fff;
+
+    border-radius: 50%;
+
+    animation: spin 0.7s linear infinite;
+}
+
+
+@keyframes spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .product-modal-wrapper {
+        padding: 10px;
+    }
+
+
+    .product-modal {
+        max-height: calc(100vh - 20px);
+    }
+
+
+    .modal-header,
+    .product-form {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+
+
+    .image-grid {
+        grid-template-columns:
+            repeat(3, 1fr);
+    }
+
+}

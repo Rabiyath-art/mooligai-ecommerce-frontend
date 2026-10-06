@@ -1,0 +1,435 @@
+<div class="admin-categories-page">
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div class="page-heading">
+
+            <span class="eyebrow">
+                CATALOG
+            </span>
+
+            <h1>
+                Categories
+            </h1>
+
+            <p>
+                Manage your product categories,
+                visibility and organization.
+            </p>
+
+        </div>
+
+
+        <button type="button" class="add-category-btn" (click)="createCategory()">
+
+            <mat-icon>
+                add
+            </mat-icon>
+
+            Add Category
+
+        </button>
+
+    </div>
+
+
+    <!-- MESSAGES -->
+
+    @if (successMessage) {
+
+    <div class="success-message">
+
+        {{ successMessage }}
+
+    </div>
+
+    }
+
+
+    @if (errorMessage) {
+
+    <div class="error-message">
+
+        {{ errorMessage }}
+
+    </div>
+
+    }
+
+
+    <!-- FILTERS -->
+
+    <div class="filter-card">
+
+        <div class="search-box">
+
+            <mat-icon>
+                search
+            </mat-icon>
+
+            <input type="text" placeholder="Search categories..." [(ngModel)]="search" (keyup.enter)="onSearch()">
+
+        </div>
+
+
+        <select [(ngModel)]="status" (change)="onStatusChange()">
+
+            <option value="">
+                All Status
+            </option>
+
+            <option value="active">
+                Active
+            </option>
+
+            <option value="inactive">
+                Inactive
+            </option>
+
+        </select>
+
+
+        <button type="button" class="clear-btn" (click)="clearFilters()">
+            Clear
+        </button>
+
+
+        <button type="button" class="search-btn" (click)="onSearch()">
+
+            <mat-icon>
+                search
+            </mat-icon>
+
+            Search
+
+        </button>
+
+    </div>
+
+
+    <!-- TABLE -->
+
+    <div class="table-card">
+
+        @if (loading) {
+
+        <div class="loading-state">
+
+            <div class="spinner"></div>
+
+            <p>
+                Loading categories...
+            </p>
+
+        </div>
+
+        }
+        @else if (categories.length === 0) {
+
+        <div class="empty-state">
+
+            <mat-icon>
+                category
+            </mat-icon>
+
+            <h3>
+                No categories found
+            </h3>
+
+            <p>
+                Create your first product category.
+            </p>
+
+            <button type="button" class="add-category-btn" (click)="createCategory()">
+                Add Category
+            </button>
+
+        </div>
+
+        }
+        @else {
+
+        <div class="table-responsive">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Slug
+                        </th>
+
+                        <th>
+                            Description
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Created
+                        </th>
+
+                        <th class="action-column">
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @for (
+                    category of categories;
+                    track category._id
+                    ) {
+
+                    <tr>
+
+                        <!-- CATEGORY -->
+
+                        <td>
+
+                            <div class="category-info">
+
+                                <div class="category-image">
+
+                                    @if (
+                                    category.image
+                                    ) {
+
+                                    <img [src]="category.image" [alt]="category.name">
+
+                                    }
+                                    @else {
+
+                                    <mat-icon>
+                                        category
+                                    </mat-icon>
+
+                                    }
+
+                                </div>
+
+
+                                <div>
+
+                                    <strong>
+                                        {{ category.name }}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- SLUG -->
+
+                        <td>
+
+                            <span class="slug">
+                                {{ category.slug }}
+                            </span>
+
+                        </td>
+
+
+                        <!-- DESCRIPTION -->
+
+                        <td>
+
+                            <span class="description">
+
+                                {{
+                                category.description ||
+                                'No description'
+                                }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            <button type="button" class="status-badge" [class.active]="category.isActive"
+                                [class.inactive]="!category.isActive" (click)="toggleStatus(category)">
+
+                                {{
+                                category.isActive
+                                ? 'Active'
+                                : 'Inactive'
+                                }}
+
+                            </button>
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            {{
+                            category.createdAt
+                            | date:'dd MMM yyyy'
+                            }}
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <div class="action-buttons">
+
+                                <button type="button" title="View" (click)="viewCategory(category)">
+
+                                    <mat-icon>
+                                        visibility
+                                    </mat-icon>
+
+                                </button>
+
+
+                                <button type="button" title="Edit" (click)="editCategory(category)">
+
+                                    <mat-icon>
+                                        edit
+                                    </mat-icon>
+
+                                </button>
+
+
+                                <button type="button" title="Delete" class="delete-action"
+                                    (click)="deleteCategory(category)">
+
+                                    <mat-icon>
+                                        delete_outline
+                                    </mat-icon>
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- PAGINATION -->
+
+        <div class="pagination">
+
+            <div class="pagination-info">
+
+                Showing
+
+                <strong>
+                    {{ categories.length }}
+                </strong>
+
+                of
+
+                <strong>
+                    {{ total }}
+                </strong>
+
+                categories
+
+            </div>
+
+
+            <div class="pagination-controls">
+
+                <button type="button" [disabled]="page === 1" (click)="previousPage()">
+
+                    <mat-icon>
+                        chevron_left
+                    </mat-icon>
+
+                </button>
+
+
+                @for (
+                pageNumber of pages;
+                track pageNumber
+                ) {
+
+                <button type="button" [class.active]="
+                                pageNumber === page
+                            " (click)="goToPage(pageNumber)">
+
+                    {{ pageNumber }}
+
+                </button>
+
+                }
+
+
+                <button type="button" [disabled]="page === totalPages" (click)="nextPage()">
+
+                    <mat-icon>
+                        chevron_right
+                    </mat-icon>
+
+                </button>
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+</div>
+
+<!-- ===================================================== -->
+<!-- CREATE CATEGORY MODAL -->
+<!-- ===================================================== -->
+
+@if (showCreateModal) {
+
+<app-admin-category-create (closeModal)="closeCreateModal()" (categoryCreated)="onCategoryCreated($event)" />
+
+}
+
+
+<!-- ===================================================== -->
+<!-- EDIT CATEGORY MODAL -->
+<!-- ===================================================== -->
+
+@if (
+showEditModal &&
+selectedCategory
+) {
+
+<app-admin-category-edit [category]="selectedCategory" (closeModal)="closeEditModal()"
+    (categoryUpdated)="onCategoryUpdated($event)" />
+
+}

@@ -1,0 +1,64 @@
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+    height: 100%;
+}
+:root {
+    --primary-green: #2D5016;
+    --sage-green: #7BA868;
+    --cream-bg: #F5F2ED;
+    --cream-alt: #FAF6EC;
+    --clay: #B85C3C;
+    --clay-dark: #a34d2f;
+    --dark: #1A1A1A;
+    --gray-light: #EFEFEF;
+    --gray-medium: #DDD;
+    --white: #FFFEF9;
+    --text-muted: #888;
+    --transition: all 0.3s cubic-bezier(0.22, 0.68, 0, 1);
+}
+
+/* =========================================================
+   GLOBAL STYLES
+   ========================================================= */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+.section-label {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--forest);
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-display);
+    color: var(--ink);
+    font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+:focus-visible {
+    outline: 2px solid var(--forest);
+    outline-offset: 3px;
+}

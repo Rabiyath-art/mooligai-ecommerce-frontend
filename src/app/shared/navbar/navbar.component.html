@@ -1,0 +1,156 @@
+<nav class="mg-nav">
+    <div class="container mg-nav__inner">
+        <a class="mg-logo" routerLink="/" aria-label="Mooligai Home">
+            Mooligai
+        </a>
+
+        <ul class="mg-nav__links d-none d-lg-flex">
+
+            <li>
+                <a routerLink="/" routerLinkActive="active">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a routerLink="/products" routerLinkActive="active">
+                    Products
+                </a>
+            </li>
+
+            <li>
+                <a href="#footer">
+                    Contact
+                </a>
+            </li>
+        </ul>
+
+        <div class="mg-nav__actions">
+            <button type="button" class="mg-icon-btn d-none d-sm-flex" aria-label="Search">
+                <mat-icon> search </mat-icon>
+            </button>
+
+            <a routerLink="/wishlist" class="mg-icon-btn position-relative" aria-label="Wishlist">
+                <mat-icon>favorite</mat-icon>
+
+                @if (wishlistCount > 0) {
+                <span class="mg-badge">
+                    {{ wishlistCount }}
+                </span>
+                }
+            </a>
+
+
+            <a routerLink="/cart" class="mg-icon-btn mg-icon-btn--fill position-relative" aria-label="Cart">
+                <mat-icon>shopping_basket</mat-icon>
+
+                @if (cartCount > 0) {
+                <span class="mg-badge">
+                    {{ cartCount }}
+                </span>
+                }
+            </a>
+
+            <!-- ================= USER ================= -->
+
+            @if (isLoggedIn) {
+            <div class="mg-user-dropdown">
+                <button type="button" class="mg-profile-btn" (click)="toggleUserMenu()"
+                    [attr.aria-expanded]="userMenuOpen" aria-label="Account menu">
+                    <mat-icon> person </mat-icon>
+                </button>
+
+
+                @if (userMenuOpen) {
+                <div class="mg-user-menu">
+                    <a routerLink="/profile" (click)="closeUserMenu()">
+                        <mat-icon> person </mat-icon>
+                        <span> Profile </span>
+                    </a>
+
+                    <a routerLink="/orders" (click)="closeUserMenu()">
+                        <mat-icon>inventory_2 </mat-icon>
+                        <span> My Orders </span>
+                    </a>
+
+
+                    <div class="mg-user-menu__divider"></div>
+                    <button type="button" (click)="logout()">
+                        <mat-icon> logout </mat-icon>
+                        <span> Logout </span>
+                    </button>
+                </div>
+                }
+            </div>
+
+            } @else {
+            <a routerLink="/login" class="mg-login-btn"> Login </a>
+            }
+
+            <button type="button" class="mg-menu-btn d-lg-none" (click)="toggleMobileMenu()"
+                [attr.aria-expanded]="mobileMenuOpen" aria-label="Toggle navigation">
+                <mat-icon> {{ mobileMenuOpen ? 'close' : 'menu' }} </mat-icon>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ================= MOBILE MENU ================= -->
+
+    @if (mobileMenuOpen) {
+    <div class="mg-mobile-menu d-lg-none">
+        <div class="container">
+            <ul>
+
+                <li>
+                    <a routerLink="/" routerLinkActive="active">
+                        Home
+                    </a>
+                </li>
+
+                <li>
+                    <a routerLink="/products" (click)="closeMobileMenu()">
+                        Products
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#footer" (click)="closeMobileMenu()">
+                        Contact
+                    </a>
+                </li>
+
+            </ul>
+
+
+            <!-- Mobile Account -->
+
+            @if (isLoggedIn) {
+            <div class="mg-mobile-account">
+                <a routerLink="/profile" (click)="closeMobileMenu()">
+                    <mat-icon> person </mat-icon>
+                    Profile
+                </a>
+
+                <a routerLink="/orders" (click)="closeMobileMenu()">
+                    <mat-icon> inventory_2 </mat-icon>
+                    My Orders
+                </a>
+
+                <button type="button" (click)="logout()">
+                    <mat-icon> logout </mat-icon>
+                    Logout
+                </button>
+
+            </div>
+
+            } @else {
+            <a routerLink="/login" class="mg-mobile-login" (click)="closeMobileMenu()">
+                Login
+            </a>
+
+            }
+        </div>
+    </div>
+    }
+</nav>

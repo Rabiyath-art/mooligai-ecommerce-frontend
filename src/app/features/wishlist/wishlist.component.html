@@ -1,0 +1,126 @@
+<section class="wishlist-page">
+
+    <div class="container py-5">
+
+        <div class="page-header">
+
+            <span class="section-label">
+                SAVED
+            </span>
+
+            <h1>
+                My Wishlist
+            </h1>
+
+            <p>
+                Products you've saved for later.
+            </p>
+
+        </div>
+
+
+        @if (loading) {
+
+        <div class="text-center py-5">
+
+            <div class="spinner-border" role="status">
+            </div>
+
+        </div>
+
+        }
+
+
+        @if (errorMessage) {
+
+        <div class="alert alert-danger">
+            {{ errorMessage }}
+        </div>
+
+        }
+
+
+        @if (!loading && products.length > 0) {
+
+        <div class="row g-4">
+
+            @for (
+            product of products;
+            track product._id
+            ) {
+
+            <div class="col-6 col-md-4 col-lg-3">
+
+                <div class="card h-100">
+
+                    @if (product.images.length) {
+
+                    <img [src]="product.images[0]" [alt]="product.name" class="card-img-top" />
+
+                    }
+
+                    <div class="card-body">
+
+                        <small>
+                            {{ product.category.name }}
+                        </small>
+
+                        <h5>
+                            {{ product.name }}
+                        </h5>
+
+                        <p>
+                            ₹{{ product.price }}
+                        </p>
+
+                        <div class="d-flex gap-2">
+
+                            <a [routerLink]="[
+                                            '/products',
+                                            product._id
+                                        ]" class="btn btn-dark">
+                                View Product
+                            </a>
+
+                            <button type="button" class="btn btn-outline-danger" (click)="removeFromWishlist(product)">
+                                Remove
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            }
+
+        </div>
+
+        }
+
+
+        @if (!loading && products.length === 0) {
+
+        <div class="text-center py-5">
+
+            <h3>
+                Your wishlist is empty
+            </h3>
+
+            <p>
+                Save products you love and find them here later.
+            </p>
+
+            <a routerLink="/products" class="btn btn-dark">
+                Browse Products
+            </a>
+
+        </div>
+
+        }
+
+    </div>
+
+</section>

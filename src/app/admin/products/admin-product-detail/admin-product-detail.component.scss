@@ -1,0 +1,484 @@
+/* ========================================= */
+/* BACKDROP */
+/* ========================================= */
+
+.modal-backdrop-custom {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1050;
+
+    background:
+        rgba(0, 0, 0, 0.45);
+
+    backdrop-filter:
+        blur(3px);
+}
+
+
+
+/* ========================================= */
+/* WRAPPER */
+/* ========================================= */
+
+.product-modal-wrapper {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1051;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    pointer-events: none;
+}
+
+
+
+/* ========================================= */
+/* MODAL */
+/* ========================================= */
+
+.product-modal {
+    width: 100%;
+
+    max-width: 850px;
+
+    max-height: 90vh;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    background: #fff;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 25px 70px
+        rgba(0, 0, 0, 0.2);
+
+    pointer-events: auto;
+
+    animation:
+        modalIn
+        .2s ease;
+}
+
+
+@keyframes modalIn {
+
+    from {
+
+        opacity: 0;
+
+        transform:
+            translateY(15px)
+            scale(.98);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+
+    }
+
+}
+
+
+
+/* ========================================= */
+/* HEADER */
+/* ========================================= */
+
+.modal-header-custom {
+
+    padding: 22px 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom:
+        1px solid #e9ecef;
+}
+
+
+.modal-header-custom h3 {
+
+    margin: 5px 0 0;
+
+    font-size: 22px;
+
+    font-weight: 700;
+}
+
+
+.eyebrow {
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    color: #6c757d;
+}
+
+
+.close-btn {
+
+    width: 38px;
+
+    height: 38px;
+
+    border: 0;
+
+    border-radius: 50%;
+
+    background: #f8f9fa;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+
+.close-btn:hover {
+
+    background: #e9ecef;
+
+}
+
+
+
+/* ========================================= */
+/* BODY */
+/* ========================================= */
+
+.modal-body-custom {
+
+    padding: 25px;
+
+    overflow-y: auto;
+}
+
+
+
+/* ========================================= */
+/* TOP PRODUCT */
+/* ========================================= */
+
+.product-detail-image {
+
+    width: 100%;
+
+    height: 300px;
+
+    margin-bottom: 25px;
+
+    overflow: hidden;
+
+    border-radius: 14px;
+
+    background: #f8f9fa;
+}
+
+
+.product-detail-image img {
+
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: contain;
+}
+
+
+.image-placeholder {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: #adb5bd;
+}
+
+
+.image-placeholder span {
+
+    font-size: 50px;
+}
+
+
+
+/* ========================================= */
+/* PRODUCT INFO */
+/* ========================================= */
+
+.product-detail-info h2 {
+
+    margin-bottom: 8px;
+
+    font-size: 26px;
+
+    font-weight: 700;
+}
+
+
+.category-badge {
+
+    display: inline-block;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    background: #f1f3f5;
+
+    color: #495057;
+
+    font-size: 11px;
+
+    font-weight: 600;
+}
+
+
+
+/* ========================================= */
+/* DETAIL GRID */
+/* ========================================= */
+
+.detail-grid {
+
+    margin-top: 25px;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 12px;
+}
+
+
+.detail-item {
+
+    padding: 15px;
+
+    border:
+        1px solid #e9ecef;
+
+    border-radius: 10px;
+}
+
+
+.detail-item > span:first-child {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #6c757d;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+}
+
+
+.detail-item strong {
+
+    font-size: 15px;
+}
+
+
+
+/* ========================================= */
+/* STATUS */
+/* ========================================= */
+
+.status {
+
+    display: inline-block;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    font-size: 10px;
+
+    font-weight: 600;
+}
+
+
+.status.active {
+
+    background: #d1e7dd;
+
+    color: #0f5132;
+}
+
+
+.status.inactive {
+
+    background: #f8d7da;
+
+    color: #842029;
+}
+
+
+
+/* ========================================= */
+/* SECTION */
+/* ========================================= */
+
+.detail-section {
+
+    margin-top: 25px;
+
+    padding-top: 25px;
+
+    border-top:
+        1px solid #e9ecef;
+}
+
+
+.detail-section h4 {
+
+    margin-bottom: 12px;
+
+    font-size: 16px;
+
+    font-weight: 700;
+}
+
+
+.detail-section p {
+
+    margin: 0;
+
+    color: #6c757d;
+
+    font-size: 14px;
+
+    line-height: 1.7;
+}
+
+
+
+/* ========================================= */
+/* INGREDIENTS */
+/* ========================================= */
+
+.ingredients {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+
+.ingredients span {
+
+    padding: 7px 12px;
+
+    background: #f8f9fa;
+
+    border:
+        1px solid #e9ecef;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+}
+
+
+
+/* ========================================= */
+/* FOOTER */
+/* ========================================= */
+
+.modal-footer-custom {
+
+    padding: 18px 25px;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    border-top:
+        1px solid #e9ecef;
+
+    background: #fff;
+}
+
+
+
+/* ========================================= */
+/* MOBILE */
+/* ========================================= */
+
+@media (max-width: 768px) {
+
+    .product-modal-wrapper {
+
+        padding: 10px;
+
+    }
+
+
+    .product-modal {
+
+        max-height: 95vh;
+
+    }
+
+
+    .detail-grid {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    .modal-footer-custom {
+
+        flex-wrap: wrap;
+
+    }
+
+}

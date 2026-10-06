@@ -1,0 +1,23 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { AdminCategoryCreateComponent } from './admin-category-create.component';
+
+describe('AdminCategoryCreateComponent', () => {
+  let component: AdminCategoryCreateComponent;
+  let fixture: ComponentFixture<AdminCategoryCreateComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AdminCategoryCreateComponent]
+    })
+    .compileComponents();
+
+    fixture = TestBed.createComponent(AdminCategoryCreateComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

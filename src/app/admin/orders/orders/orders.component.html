@@ -1,0 +1,456 @@
+<div class="admin-orders-page">
+
+
+    <!-- ============================================== -->
+    <!-- HEADER -->
+    <!-- ============================================== -->
+
+    <div class="page-header">
+
+        <div class="page-heading">
+
+            <span class="eyebrow">
+                MANAGEMENT
+            </span>
+
+            <h1>
+                Orders
+            </h1>
+
+            <p>
+                Manage customer orders,
+                payments and delivery status.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- FILTERS -->
+    <!-- ============================================== -->
+
+    <div class="filters-card">
+
+        <div class="search-box">
+
+            <i class="bi bi-search"></i>
+
+            <input type="text" [(ngModel)]="search" (keyup.enter)="onSearch()"
+                placeholder="Search order, customer or phone...">
+
+        </div>
+
+
+        <select class="filter-select" [(ngModel)]="paymentStatus" (change)="onFilterChange()">
+
+            <option value="">
+                All Payments
+            </option>
+
+            <option value="pending">
+                Pending
+            </option>
+
+            <option value="paid">
+                Paid
+            </option>
+
+            <option value="failed">
+                Failed
+            </option>
+
+            <option value="refunded">
+                Refunded
+            </option>
+
+        </select>
+
+
+        <select class="filter-select" [(ngModel)]="orderStatus" (change)="onFilterChange()">
+
+            <option value="">
+                All Orders
+            </option>
+
+            <option value="pending">
+                Pending
+            </option>
+
+            <option value="confirmed">
+                Confirmed
+            </option>
+
+            <option value="processing">
+                Processing
+            </option>
+
+            <option value="shipped">
+                Shipped
+            </option>
+
+            <option value="delivered">
+                Delivered
+            </option>
+
+            <option value="cancelled">
+                Cancelled
+            </option>
+
+        </select>
+
+
+        <select class="filter-select" [(ngModel)]="sort" (change)="onFilterChange()">
+
+            <option value="">
+                Newest
+            </option>
+
+            <option value="oldest">
+                Oldest
+            </option>
+
+            <option value="amount_asc">
+                Amount: Low to High
+            </option>
+
+            <option value="amount_desc">
+                Amount: High to Low
+            </option>
+
+        </select>
+
+
+        <button type="button" class="clear-btn" (click)="clearFilters()">
+
+            Clear
+
+        </button>
+
+    </div>
+
+
+    <!-- ============================================== -->
+    <!-- LOADING -->
+    <!-- ============================================== -->
+
+    @if (loading) {
+
+    <div class="loading-state">
+
+        <div class="spinner-border" role="status">
+        </div>
+
+        <p>
+            Loading orders...
+        </p>
+
+    </div>
+
+    }
+
+
+    <!-- ============================================== -->
+    <!-- ERROR -->
+    <!-- ============================================== -->
+
+    @if (!loading && errorMessage) {
+
+    <div class="error-state">
+
+        <div class="error-icon">
+            !
+        </div>
+
+        <h3>
+            Unable to Load Orders
+        </h3>
+
+        <p>
+            {{ errorMessage }}
+        </p>
+
+        <button type="button" class="retry-btn" (click)="loadOrders()">
+
+            Try Again
+
+        </button>
+
+    </div>
+
+    }
+
+
+    <!-- ============================================== -->
+    <!-- EMPTY -->
+    <!-- ============================================== -->
+
+    @if (
+    !loading &&
+    !errorMessage &&
+    orders.length === 0
+    ) {
+
+    <div class="empty-state">
+
+        <i class="bi bi-box-seam"></i>
+
+        <h2>
+            No Orders Found
+        </h2>
+
+        <p>
+            There are no orders matching
+            your current filters.
+        </p>
+
+    </div>
+
+    }
+
+
+    <!-- ============================================== -->
+    <!-- TABLE -->
+    <!-- ============================================== -->
+
+    @if (
+    !loading &&
+    !errorMessage &&
+    orders.length > 0
+    ) {
+
+    <div class="orders-card">
+
+        <div class="table-responsive">
+
+            <table class="orders-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Order
+                        </th>
+
+                        <th>
+                            Customer
+                        </th>
+
+                        <th>
+                            Items
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Payment
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    @for (
+                    order of orders;
+                    track order._id
+                    ) {
+
+                    <tr>
+
+
+                        <!-- ORDER -->
+
+                        <td>
+
+                            <strong class="order-id" [title]="order._id">
+
+                                #{{ order._id }}
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- CUSTOMER -->
+
+                        <td>
+
+                            <div class="customer-info">
+
+                                <strong>
+                                    {{ order.user.name }}
+                                </strong>
+
+                                <span>
+                                    {{ order.user.email }}
+                                </span>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- ITEMS -->
+
+                        <td>
+
+                            <span class="item-count">
+
+                                {{ getTotalItems(order) }}
+                                {{
+                                getTotalItems(order) === 1
+                                ? 'item'
+                                : 'items'
+                                }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- AMOUNT -->
+
+                        <td>
+
+                            <strong>
+                                ₹{{ order.totalAmount }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- PAYMENT -->
+
+                        <td>
+
+                            <span class="payment-badge" [class]="
+                                            getPaymentStatusClass(
+                                                order.payment.status
+                                            )
+                                        ">
+
+                                {{ order.payment.status }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- ORDER STATUS -->
+
+                        <td>
+
+                            <span class="status-badge" [class]="
+                                            getStatusClass(
+                                                order.orderStatus
+                                            )
+                                        ">
+
+                                {{ order.orderStatus }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td>
+
+                            {{ order.createdAt | date:'dd MMM yyyy' }}
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+                            <a [routerLink]="[
+                                            '/admin/orders',
+                                            order._id
+                                        ]" class="view-btn">
+
+                                View
+
+                                <i class="bi bi-arrow-right"></i>
+
+                            </a>
+
+                        </td>
+
+
+                    </tr>
+
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- ====================================== -->
+        <!-- PAGINATION -->
+        <!-- ====================================== -->
+
+        <div class="pagination">
+
+            <button type="button" class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+
+                <i class="bi bi-chevron-left"></i>
+
+            </button>
+
+
+            @for (
+            page of getPages();
+            track page
+            ) {
+
+            <button type="button" class="page-number" [class.active]="
+                            page === currentPage
+                        " (click)="goToPage(page)">
+
+                {{ page }}
+
+            </button>
+
+            }
+
+
+            <button type="button" class="page-btn" [disabled]="
+                        currentPage === totalPages
+                    " (click)="goToPage(currentPage + 1)">
+
+                <i class="bi bi-chevron-right"></i>
+
+            </button>
+
+        </div>
+
+    </div>
+
+    }
+
+</div>

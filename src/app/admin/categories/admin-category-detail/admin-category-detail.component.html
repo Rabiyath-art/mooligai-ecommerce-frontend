@@ -1,0 +1,184 @@
+<div class="admin-category-detail-page">
+
+    <div class="detail-header">
+
+        <button type="button" class="back-btn" (click)="goBack()">
+
+            <mat-icon>
+                arrow_back
+            </mat-icon>
+
+            Back to Categories
+
+        </button>
+
+    </div>
+
+
+    @if (loading) {
+
+    <div class="loading-state">
+
+        <div class="spinner"></div>
+
+        <p>
+            Loading category...
+        </p>
+
+    </div>
+
+    }
+    @else if (errorMessage) {
+
+    <div class="error-message">
+
+        {{ errorMessage }}
+
+    </div>
+
+    }
+    @else if (category) {
+
+    <div class="category-detail-card">
+
+        <div class="category-hero">
+
+            <div class="category-large-image">
+
+                @if (category.image) {
+
+                <img [src]="category.image" [alt]="category.name">
+
+                }
+                @else {
+
+                <mat-icon>
+                    category
+                </mat-icon>
+
+                }
+
+            </div>
+
+
+            <div class="category-heading">
+
+                <span class="eyebrow">
+                    CATEGORY
+                </span>
+
+                <h1>
+                    {{ category.name }}
+                </h1>
+
+                <span class="status" [class.active]="category.isActive" [class.inactive]="!category.isActive">
+
+                    {{
+                    category.isActive
+                    ? 'Active'
+                    : 'Inactive'
+                    }}
+
+                </span>
+
+            </div>
+
+
+            <button type="button" class="edit-btn" (click)="editCategory()">
+
+                <mat-icon>
+                    edit
+                </mat-icon>
+
+                Edit Category
+
+            </button>
+
+        </div>
+
+
+        <div class="detail-content">
+
+            <div class="detail-item">
+
+                <span class="label">
+                    Category Name
+                </span>
+
+                <strong>
+                    {{ category.name }}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="label">
+                    Slug
+                </span>
+
+                <strong class="slug">
+                    {{ category.slug }}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="label">
+                    Status
+                </span>
+
+                <strong>
+                    {{
+                    category.isActive
+                    ? 'Active'
+                    : 'Inactive'
+                    }}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item">
+
+                <span class="label">
+                    Created
+                </span>
+
+                <strong>
+                    {{
+                    category.createdAt
+                    | date:'dd MMM yyyy, hh:mm a'
+                    }}
+                </strong>
+
+            </div>
+
+
+            <div class="detail-item full">
+
+                <span class="label">
+                    Description
+                </span>
+
+                <p>
+
+                    {{
+                    category.description ||
+                    'No description available.'
+                    }}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    }
+
+</div>

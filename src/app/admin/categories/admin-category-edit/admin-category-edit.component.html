@@ -1,0 +1,170 @@
+<div class="modal-backdrop" (click)="cancel()">
+
+    <div class="category-modal" (click)="$event.stopPropagation()">
+
+        <!-- HEADER -->
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    CATALOG
+                </span>
+
+                <h2>
+                    Edit Category
+                </h2>
+
+                <p>
+                    Update category information
+                    and visibility.
+                </p>
+
+            </div>
+
+
+            <button type="button" class="close-btn" (click)="cancel()" [disabled]="saving">
+
+                <mat-icon>
+                    close
+                </mat-icon>
+
+            </button>
+
+        </div>
+
+
+        <!-- ERROR -->
+
+        @if (errorMessage) {
+
+        <div class="error-message">
+
+            <mat-icon>
+                error_outline
+            </mat-icon>
+
+            {{ errorMessage }}
+
+        </div>
+
+        }
+
+
+        <!-- BODY -->
+
+        <div class="modal-body">
+
+            <div class="form-grid">
+
+                <!-- NAME -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Category Name
+                        <span>*</span>
+                    </label>
+
+                    <input type="text" [(ngModel)]="name" placeholder="Example: Hair Care">
+
+                </div>
+
+
+                <!-- SLUG -->
+
+                <div class="form-group">
+
+                    <label>
+                        Slug
+                        <span>*</span>
+                    </label>
+
+                    <input type="text" [(ngModel)]="slug" placeholder="hair-care">
+
+                </div>
+
+
+                <!-- IMAGE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Image URL
+                    </label>
+
+                    <input type="text" [(ngModel)]="image" placeholder="/uploads/categories/image.jpg">
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group full">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea rows="4" [(ngModel)]="description" placeholder="Describe this category..."></textarea>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="form-group full">
+
+                    <label class="checkbox-label">
+
+                        <input type="checkbox" [(ngModel)]="isActive">
+
+                        <span>
+                            Active category
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="modal-footer">
+
+            <button type="button" class="cancel-btn" (click)="cancel()" [disabled]="saving">
+                Cancel
+            </button>
+
+
+            <button type="button" class="save-btn" (click)="updateCategory()" [disabled]="saving">
+
+                @if (saving) {
+
+                <span class="button-spinner"></span>
+
+                Updating...
+
+                }
+                @else {
+
+                <mat-icon>
+                    save
+                </mat-icon>
+
+                Update Category
+
+                }
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

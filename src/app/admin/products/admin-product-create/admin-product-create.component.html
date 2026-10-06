@@ -1,0 +1,440 @@
+<div class="product-modal-backdrop" (click)="closeModal()">
+</div>
+
+
+<div class="product-modal-wrapper">
+
+    <div class="product-modal" (click)="$event.stopPropagation()">
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    INVENTORY
+                </span>
+
+                <h2>
+                    Add Product
+                </h2>
+
+                <p>
+                    Add a new product to your store.
+                </p>
+
+            </div>
+
+
+            <button type="button" class="close-btn" (click)="closeModal()" [disabled]="loading">
+
+                <mat-icon>
+                    close
+                </mat-icon>
+
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ERROR -->
+        <!-- ================================================= -->
+
+        @if (errorMessage) {
+        <div class="form-error">
+            <mat-icon> error </mat-icon>
+            <span> {{ errorMessage }} </span>
+        </div>
+        }
+
+        <!-- ================================================= -->
+        <!-- FORM -->
+        <!-- ================================================= -->
+
+        <form (ngSubmit)="submit()" class="product-form">
+
+
+            <!-- ================================================= -->
+            <!-- BASIC INFORMATION -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        01
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Basic information
+                        </h3>
+
+                        <p>
+                            Enter the main details of your product.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Product name <span>*</span>
+                    </label>
+
+                    <input type="text" [(ngModel)]="product.name" name="name" placeholder="Enter product name"
+                        (blur)="generateSlug()" required>
+
+                </div>
+
+
+                <!-- SLUG -->
+
+                <div class="form-group">
+
+                    <label>
+                        Slug
+                    </label>
+
+                    <input type="text" [(ngModel)]="product.slug" name="slug" placeholder="product-slug">
+
+                    <small>
+                        Automatically generated from product name.
+                    </small>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label>
+                        Description <span>*</span>
+                    </label>
+
+                    <textarea [(ngModel)]="product.description" name="description" rows="4"
+                        placeholder="Enter product description" required>
+                    </textarea>
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label>
+                        Category <span>*</span>
+                    </label>
+
+
+                    @if (loadingCategories) {
+
+                    <div class="select-loading">
+                        Loading categories...
+                    </div>
+
+                    }
+
+                    @else {
+
+                    <select [(ngModel)]="product.category" name="category" required>
+
+                        <option value="" disabled>
+
+                            Select category
+
+                        </option>
+
+
+                        @for (
+                        category of categories;
+                        track category._id
+                        ) {
+
+                        <option [value]="category._id">
+
+                            {{ category.name }}
+
+                        </option>
+
+                        }
+
+                    </select>
+
+                    }
+
+                </div>
+
+
+                <!-- WEIGHT -->
+
+                <div class="form-group">
+
+                    <label>
+                        Weight
+                    </label>
+
+                    <input type="text" [(ngModel)]="product.weight" name="weight" placeholder="100g">
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- PRICING -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        02
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Pricing & inventory
+                        </h3>
+
+                        <p>
+                            Set your product price and available stock.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="two-column">
+
+
+                    <!-- PRICE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Price <span>*</span>
+                        </label>
+
+                        <div class="input-with-prefix">
+
+                            <span>
+                                ₹
+                            </span>
+
+                            <input type="number" [(ngModel)]="product.price" name="price" min="0" step="0.01"
+                                placeholder="0.00" required>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STOCK -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Stock <span>*</span>
+                        </label>
+
+                        <input type="number" [(ngModel)]="product.stock" name="stock" min="0" step="1" placeholder="0"
+                            required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <label class="status-toggle">
+
+                    <input type="checkbox" [(ngModel)]="product.isActive" name="isActive">
+
+                    <span class="toggle-track">
+
+                        <span class="toggle-thumb"></span>
+
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Product status
+                        </strong>
+
+                        <small>
+                            Make this product visible in the store.
+                        </small>
+
+                    </span>
+
+                </label>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- INGREDIENTS -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        03
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Ingredients
+                        </h3>
+
+                        <p>
+                            Separate ingredients using commas.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Ingredients
+                    </label>
+
+                    <textarea [(ngModel)]="product.ingredients" name="ingredients" rows="3"
+                        placeholder="Curry leaves, cumin, pepper, salt">
+                    </textarea>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- IMAGES -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        04
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Product images
+                        </h3>
+
+                        <p>
+                            Add up to 5 product images.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label class="upload-box">
+                    <input type="file" accept="image/png,image/jpeg,image/webp" multiple
+                        (change)="onImagesSelected($event)">
+                    <mat-icon> cloud_upload </mat-icon>
+                    <strong> Upload product images </strong>
+                    <small> PNG, JPG or WEBP · Maximum 5 images </small>
+                </label>
+
+
+                @if (imagePreviews.length) {
+
+                <div class="image-grid">
+
+                    @for (
+                    image of imagePreviews;
+                    track $index
+                    ) {
+
+                    <div class="image-item">
+
+                        <img [src]="image" alt="Product preview">
+
+                        <button type="button" class="remove-image" (click)="removeImage($index)">
+
+                            <mat-icon>
+                                close
+                            </mat-icon>
+
+                        </button>
+
+                    </div>
+
+                    }
+
+                </div>
+
+                }
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- FOOTER -->
+            <!-- ================================================= -->
+
+            <div class="modal-footer">
+
+                <button type="button" class="secondary-btn" (click)="closeModal()" [disabled]="loading">
+
+                    Cancel
+
+                </button>
+
+
+                <button type="submit" class="primary-btn" [disabled]="loading || loadingCategories">
+
+                    @if (loading) {
+
+                    <span class="small-spinner"></span>
+
+                    Creating...
+
+                    }
+
+                    @else {
+                    <mat-icon> add </mat-icon>
+                    Create Product
+                    }
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

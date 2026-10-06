@@ -1,0 +1,478 @@
+<div class="product-modal-backdrop" (click)="closeModal()">
+</div>
+
+
+<div class="product-modal-wrapper">
+
+    <div class="product-modal" (click)="$event.stopPropagation()">
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    INVENTORY
+                </span>
+
+                <h2>
+                    Edit Product
+                </h2>
+
+                <p>
+                    Update your product information.
+                </p>
+
+            </div>
+
+
+            <button type="button" class="close-btn" (click)="closeModal()" [disabled]="loading">
+                <mat-icon> close </mat-icon>>
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ERROR -->
+        <!-- ================================================= -->
+
+        @if (errorMessage) {
+
+        <div class="form-error">
+
+            <mat-icon>
+                error
+            </mat-icon>>
+
+            <span>
+                {{ errorMessage }}
+            </span>
+
+        </div>
+
+        }
+
+
+        <!-- ================================================= -->
+        <!-- FORM -->
+        <!-- ================================================= -->
+
+        <form class="product-form" (ngSubmit)="submit()">
+
+
+            <!-- ================================================= -->
+            <!-- BASIC -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        01
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Basic information
+                        </h3>
+
+                        <p>
+                            Update the main details of your product.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Product name <span>*</span>
+                    </label>
+
+                    <input type="text" [(ngModel)]="form.name" name="name" required>
+
+                </div>
+
+
+                <!-- SLUG -->
+
+                <div class="form-group">
+
+                    <label>
+                        Slug <span>*</span>
+                    </label>
+
+                    <input type="text" [(ngModel)]="form.slug" name="slug" required>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label>
+                        Description <span>*</span>
+                    </label>
+
+                    <textarea [(ngModel)]="form.description" name="description" rows="4" required>
+                    </textarea>
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label>
+                        Category <span>*</span>
+                    </label>
+
+
+                    @if (loadingCategories) {
+
+                    <div class="select-loading">
+                        Loading categories...
+                    </div>
+
+                    }
+
+                    @else {
+
+                    <select [(ngModel)]="form.category" name="category" required>
+
+                        <option value="" disabled>
+
+                            Select category
+
+                        </option>
+
+
+                        @for (
+                        category of categories;
+                        track category._id
+                        ) {
+
+                        <option [value]="category._id">
+
+                            {{ category.name }}
+
+                        </option>
+
+                        }
+
+                    </select>
+
+                    }
+
+                </div>
+
+
+                <!-- WEIGHT -->
+
+                <div class="form-group">
+
+                    <label>
+                        Weight
+                    </label>
+
+                    <input type="text" [(ngModel)]="form.weight" name="weight" placeholder="100g">
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- PRICE -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        02
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Pricing & inventory
+                        </h3>
+
+                        <p>
+                            Update your product price and stock.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="two-column">
+
+
+                    <!-- PRICE -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Price <span>*</span>
+                        </label>
+
+                        <div class="input-with-prefix">
+
+                            <span>
+                                ₹
+                            </span>
+
+                            <input type="number" [(ngModel)]="form.price" name="price" min="0" step="0.01" required>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STOCK -->
+
+                    <div class="form-group">
+
+                        <label>
+                            Stock <span>*</span>
+                        </label>
+
+                        <input type="number" [(ngModel)]="form.stock" name="stock" min="0" required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <label class="status-toggle">
+
+                    <input type="checkbox" [(ngModel)]="form.isActive" name="isActive">
+
+                    <span class="toggle-track">
+
+                        <span class="toggle-thumb"></span>
+
+                    </span>
+
+                    <span>
+
+                        <strong>
+                            Product status
+                        </strong>
+
+                        <small>
+                            Make this product visible in the store.
+                        </small>
+
+                    </span>
+
+                </label>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- INGREDIENTS -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        03
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Ingredients
+                        </h3>
+
+                        <p>
+                            Separate ingredients using commas.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Ingredients
+                    </label>
+
+                    <textarea [(ngModel)]="form.ingredients" name="ingredients" rows="3"
+                        placeholder="Curry leaves, cumin, pepper">
+                    </textarea>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- IMAGES -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span class="section-number">
+                        04
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Product images
+                        </h3>
+
+                        <p>
+                            Manage your product images.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EXISTING -->
+
+                @if (existingImages.length) {
+
+                <div class="image-grid">
+
+                    @for (
+                    image of existingImages;
+                    track $index
+                    ) {
+
+                    <div class="image-item">
+
+                        <img [src]="image" [alt]="form.name">
+
+                        <button type="button" class="remove-image" (click)="removeExistingImage($index)">
+
+                            <mat-icon>
+                                close
+                            </mat-icon>
+
+                        </button>
+
+                    </div>
+
+                    }
+
+                </div>
+
+                }
+
+
+                <!-- UPLOAD -->
+
+                @if (
+                existingImages.length +
+                selectedImages.length < 5 ) { <label class="upload-box">
+
+                    <input type="file" accept="image/png,image/jpeg,image/webp" multiple
+                        (change)="onImagesSelected($event)">
+
+                    <mat-icon>
+                        cloud_upload
+                    </mat-icon>
+
+                    <strong>
+                        Add product images
+                    </strong>
+
+                    <small>
+                        PNG, JPG or WEBP · Maximum 5 images
+                    </small>
+
+                    </label>
+
+                    }
+
+
+                    <!-- NEW PREVIEWS -->
+
+                    @if (imagePreviews.length) {
+
+                    <div class="image-grid new-images">
+
+                        @for (
+                        image of imagePreviews;
+                        track $index
+                        ) {
+
+                        <div class="image-item">
+
+                            <img [src]="image" alt="New image">
+
+                            <button type="button" class="remove-image" (click)="removeNewImage($index)">
+                                <mat-icon> close </mat-icon>
+                            </button>
+                        </div>
+                        }
+                    </div>
+
+                    }
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- FOOTER -->
+            <!-- ================================================= -->
+
+            <div class="modal-footer">
+
+                <button type="button" class="secondary-btn" (click)="closeModal()" [disabled]="loading">
+
+                    Cancel
+
+                </button>
+
+
+                <button type="submit" class="primary-btn" [disabled]="loading || loadingCategories">
+
+                    @if (loading) {
+
+                    <span class="small-spinner"></span>
+
+                    Updating...
+
+                    }
+
+                    @else {
+                    <mat-icon> save </mat-icon>
+                    Update Product
+                    }
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

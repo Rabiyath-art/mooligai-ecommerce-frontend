@@ -1,0 +1,467 @@
+<section class="admin-customers-page">
+
+    <div class="container-fluid py-4">
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    CUSTOMER MANAGEMENT
+                </span>
+
+                <h1>
+                    Customers
+                </h1>
+
+                <p>
+                    Manage your customers and their orders.
+                </p>
+
+            </div>
+
+
+            <div class="customer-count">
+
+                <strong>
+                    {{ total }}
+                </strong>
+
+                <span>
+                    Customers
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ERROR -->
+        <!-- ================================================= -->
+
+        @if (errorMessage) {
+
+        <div class="alert alert-danger">
+
+            {{ errorMessage }}
+
+        </div>
+
+        }
+
+
+        <!-- ================================================= -->
+        <!-- FILTER BAR -->
+        <!-- ================================================= -->
+
+        <div class="filter-card">
+
+            <div class="search-box">
+
+                <i class="bi bi-search"></i>
+
+                <input type="text" [(ngModel)]="search" (keyup.enter)="searchCustomers()"
+                    placeholder="Search by name or email">
+
+            </div>
+
+
+            <select [(ngModel)]="status" (change)="onStatusChange()" class="filter-select">
+
+                <option value="">
+                    All Customers
+                </option>
+
+                <option value="active">
+                    Active
+                </option>
+
+                <option value="inactive">
+                    Inactive
+                </option>
+
+            </select>
+
+
+            <select [(ngModel)]="sort" (change)="onSortChange()" class="filter-select">
+
+                <option value="">
+                    Newest
+                </option>
+
+                <option value="oldest">
+                    Oldest
+                </option>
+
+                <option value="name_asc">
+                    Name A-Z
+                </option>
+
+                <option value="name_desc">
+                    Name Z-A
+                </option>
+
+            </select>
+
+
+            <button type="button" class="search-button" (click)="searchCustomers()">
+
+                Search
+
+            </button>
+
+
+            <button type="button" class="clear-button" (click)="clearFilters()">
+
+                Clear
+
+            </button>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- LOADING -->
+        <!-- ================================================= -->
+
+        @if (loading) {
+
+        <div class="loading-state">
+
+            <div class="spinner-border" role="status">
+            </div>
+
+            <p>
+                Loading customers...
+            </p>
+
+        </div>
+
+        }
+
+
+        <!-- ================================================= -->
+        <!-- EMPTY -->
+        <!-- ================================================= -->
+
+        @if (
+        !loading &&
+        !errorMessage &&
+        customers.length === 0
+        ) {
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+
+                <i class="bi bi-people"></i>
+
+            </div>
+
+            <h2>
+                No Customers Found
+            </h2>
+
+            <p>
+                No customers match your current filters.
+            </p>
+
+        </div>
+
+        }
+
+
+        <!-- ================================================= -->
+        <!-- CUSTOMER TABLE -->
+        <!-- ================================================= -->
+
+        @if (
+        !loading &&
+        customers.length > 0
+        ) {
+
+        <div class="table-card">
+
+            <div class="table-responsive">
+
+                <table class="customers-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Email
+                            </th>
+
+                            <th>
+                                Joined
+                            </th>
+
+                            <th>
+                                Orders
+                            </th>
+
+                            <th>
+                                Spent
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        @for (
+                        customer of customers;
+                        track trackByCustomer($index, customer)
+                        ) {
+
+                        <tr>
+
+                            <!-- CUSTOMER -->
+
+                            <td>
+
+                                <div class="customer-info">
+
+                                    <div class="avatar">
+
+                                        @if (customer.avatar) {
+
+                                        <img [src]="customer.avatar" [alt]="customer.name">
+
+                                        } @else {
+
+                                        <span>
+                                            {{
+                                            customer.name
+                                            .charAt(0)
+                                            .toUpperCase()
+                                            }}
+                                        </span>
+
+                                        }
+
+                                    </div>
+
+
+                                    <div>
+
+                                        <strong>
+                                            {{ customer.name }}
+                                        </strong>
+
+                                        <span>
+                                            Google Account
+                                        </span>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+
+                            <!-- EMAIL -->
+
+                            <td>
+
+                                <span class="email">
+
+                                    {{ customer.email }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- JOINED -->
+
+                            <td>
+
+                                <span class="date">
+
+                                    {{
+                                    customer.createdAt
+                                    | date:'dd MMM yyyy'
+                                    }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- ORDERS -->
+
+                            <td>
+
+                                <strong>
+                                    {{ customer.orderCount }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- SPENT -->
+
+                            <td>
+
+                                <strong>
+                                    ₹{{ customer.totalSpent }}
+                                </strong>
+
+                            </td>
+
+
+                            <!-- STATUS -->
+
+                            <td>
+
+                                <span class="status-badge" [class.active]="customer.isActive"
+                                    [class.inactive]="!customer.isActive">
+
+                                    {{
+                                    customer.isActive
+                                    ? 'Active'
+                                    : 'Inactive'
+                                    }}
+
+                                </span>
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <div class="actions">
+
+                                    <button type="button" class="view-button" (click)="viewCustomer(customer)"
+                                        title="View Customer">
+
+                                        <i class="bi bi-eye"></i>
+
+                                    </button>
+
+
+                                    <button type="button" class="status-button" [class.disable]="customer.isActive"
+                                        [class.enable]="!customer.isActive" (click)="toggleCustomerStatus(customer)"
+                                        [title]="
+                                                    customer.isActive
+                                                        ? 'Disable Customer'
+                                                        : 'Activate Customer'
+                                                ">
+
+                                        @if (
+                                        customer.isActive
+                                        ) {
+
+                                        <i class="bi bi-person-dash"></i>
+
+                                        } @else {
+
+                                        <i class="bi bi-person-check"></i>
+
+                                        }
+
+                                    </button>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- PAGINATION -->
+            <!-- ================================================= -->
+
+            <div class="pagination-bar">
+
+                <span>
+
+                    Showing
+                    <strong>
+                        {{ customers.length }}
+                    </strong>
+                    of
+                    <strong>
+                        {{ total }}
+                    </strong>
+                    customers
+
+                </span>
+
+
+                <div class="pagination">
+
+                    <button type="button" [disabled]="page === 1" (click)="previousPage()">
+
+                        <i class="bi bi-chevron-left"></i>
+
+                    </button>
+
+
+                    @for (
+                    pageNumber of pages;
+                    track pageNumber
+                    ) {
+
+                    <button type="button" [class.current]="
+                                    pageNumber === page
+                                " (click)="goToPage(pageNumber)">
+
+                        {{ pageNumber }}
+
+                    </button>
+
+                    }
+
+
+                    <button type="button" [disabled]="page === totalPages" (click)="nextPage()">
+
+                        <i class="bi bi-chevron-right"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+</section>

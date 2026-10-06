@@ -1,0 +1,429 @@
+<section class="customer-detail-page">
+
+    <div class="container-fluid py-4">
+
+
+        <!-- ================================================= -->
+        <!-- BACK -->
+        <!-- ================================================= -->
+
+        <a routerLink="/admin/customers" class="back-link">
+
+            <i class="bi bi-arrow-left"></i>
+
+            Back to Customers
+
+        </a>
+
+
+        <!-- ================================================= -->
+        <!-- LOADING -->
+        <!-- ================================================= -->
+
+        @if (loading) {
+
+        <div class="loading-state">
+
+            <div class="spinner-border" role="status">
+            </div>
+
+            <p>
+                Loading customer...
+            </p>
+
+        </div>
+
+        }
+
+
+        <!-- ================================================= -->
+        <!-- ERROR -->
+        <!-- ================================================= -->
+
+        @if (!loading && errorMessage) {
+
+        <div class="error-state">
+
+            <div class="error-icon">
+
+                <i class="bi bi-exclamation-circle"></i>
+
+            </div>
+
+            <h2>
+                Unable to Load Customer
+            </h2>
+
+            <p>
+                {{ errorMessage }}
+            </p>
+
+            <a routerLink="/admin/customers" class="back-button">
+
+                Back to Customers
+
+            </a>
+
+        </div>
+
+        }
+
+
+        <!-- ================================================= -->
+        <!-- CUSTOMER -->
+        <!-- ================================================= -->
+
+        @if (!loading && customer) {
+
+
+        <!-- ================================================= -->
+        <!-- HEADER -->
+        <!-- ================================================= -->
+
+        <div class="page-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    CUSTOMER DETAILS
+                </span>
+
+                <h1>
+                    {{ customer.name }}
+                </h1>
+
+                <p>
+                    Customer since
+                    {{ formatDate(customer.createdAt) }}
+                </p>
+
+            </div>
+
+
+            <span class="status-badge" [class.active]="customer.isActive" [class.inactive]="!customer.isActive">
+
+                {{
+                customer.isActive
+                ? 'Active'
+                : 'Inactive'
+                }}
+
+            </span>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- CUSTOMER INFO -->
+        <!-- ================================================= -->
+
+        <section class="customer-card">
+
+            <div class="profile-section">
+
+                <div class="large-avatar">
+
+                    @if (customer.avatar) {
+
+                    <img [src]="customer.avatar" [alt]="customer.name">
+
+                    } @else {
+
+                    {{
+                    customer.name
+                    .charAt(0)
+                    .toUpperCase()
+                    }}
+
+                    }
+
+                </div>
+
+
+                <div class="profile-info">
+
+                    <h2>
+                        {{ customer.name }}
+                    </h2>
+
+                    <p>
+                        {{ customer.email }}
+                    </p>
+
+                    <span>
+                        <i class="bi bi-google"></i>
+
+                        Google Account
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="customer-meta">
+
+                <div>
+
+                    <span>
+                        Email
+                    </span>
+
+                    <strong>
+                        {{ customer.email }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Provider
+                    </span>
+
+                    <strong>
+                        {{ customer.provider | titlecase }}
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Joined
+                    </span>
+
+                    <strong>
+                        {{ formatDate(customer.createdAt) }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- STATISTICS -->
+        <!-- ================================================= -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="bi bi-bag"></i>
+                </div>
+
+                <div>
+
+                    <span>
+                        Total Orders
+                    </span>
+
+                    <strong>
+                        {{ statistics.totalOrders }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+                <div>
+
+                    <span>
+                        Paid Orders
+                    </span>
+
+                    <strong>
+                        {{ statistics.paidOrders }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <i class="bi bi-currency-rupee"></i>
+                </div>
+
+                <div>
+
+                    <span>
+                        Total Spent
+                    </span>
+
+                    <strong>
+                        ₹{{ statistics.totalSpent }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ORDERS -->
+        <!-- ================================================= -->
+
+        <section class="orders-card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="section-label">
+                        PURCHASE HISTORY
+                    </span>
+
+                    <h2>
+                        Customer Orders
+                    </h2>
+
+                </div>
+
+                <span>
+                    {{ orders.length }}
+                    {{
+                    orders.length === 1
+                    ? 'Order'
+                    : 'Orders'
+                    }}
+                </span>
+
+            </div>
+
+
+            @if (orders.length === 0) {
+
+            <div class="empty-orders">
+
+                <i class="bi bi-bag-x"></i>
+
+                <h3>
+                    No Orders
+                </h3>
+
+                <p>
+                    This customer has not placed any orders.
+                </p>
+
+            </div>
+
+            }
+
+
+            @if (orders.length > 0) {
+
+            <div class="orders-list">
+
+                @for (
+                order of orders;
+                track order._id
+                ) {
+
+                <div class="order-row">
+
+                    <div>
+
+                        <span class="order-label">
+                            ORDER
+                        </span>
+
+                        <strong>
+                            #{{ order._id }}
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="order-label">
+                            DATE
+                        </span>
+
+                        <span>
+                            {{ formatDate(order.createdAt) }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="order-label">
+                            PAYMENT
+                        </span>
+
+                        <span class="payment-status">
+
+                            {{
+                            order.payment?.status
+                            | titlecase
+                            }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="order-label">
+                            STATUS
+                        </span>
+
+                        <span class="order-status" [class]="
+                                            getStatusClass(
+                                                getOrderStatus(order)
+                                            )
+                                        ">
+
+                            {{
+                            getOrderStatus(order)
+                            | titlecase
+                            }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="order-total">
+
+                        ₹{{ order.totalAmount }}
+
+                    </div>
+
+                </div>
+
+                }
+
+            </div>
+
+            }
+
+        </section>
+
+        }
+
+    </div>
+
+</section>
